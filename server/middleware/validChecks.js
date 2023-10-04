@@ -1,7 +1,7 @@
 const { validateEmail, validateLength } = require("../utils/validation");
 
 exports.validateRegister = async (req, res, next) => {
-  const { name, email, password, status } = req.body;
+  const { name, email, password, username } = req.body;
 
   if (!name) {
     return res.status(500).json({ message: "Please provide your name!" });
@@ -27,21 +27,23 @@ exports.validateRegister = async (req, res, next) => {
       .status(500)
       .json({ message: "Password must be minimum 6 chars!" });
   }
-  if (status.length > 64) {
+  if (!username) {
+    return res.status(500).json({ message: "Please provide your username!" });
+  } else if (!validateLength(username, 3, 30)) {
     return res
       .status(500)
-      .json({ message: "Status must be max 64 characters" });
+      .json({ message: "Name must be between 3-30 chars!" });
   }
   next();
 };
 
 exports.validateLogin = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
-  if (!email) {
+  if (!email && !username) {
     return res
       .status(500)
-      .json({ message: "Please provide your email address" });
+      .json({ message: "Please provide your email address or username" });
   } else if (!validateEmail(email)) {
     return res
       .status(500)

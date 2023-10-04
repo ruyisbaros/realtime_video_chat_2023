@@ -10,6 +10,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
       text: true,
     },
+    username: {
+      type: String,
+      trim: true,
+      required: [true, "Please provide your username"],
+      unique: true,
+    },
     email: {
       type: String,
       required: [true, "Please provide your email address"],
@@ -26,11 +32,7 @@ const userSchema = new mongoose.Schema(
       default:
         "https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png",
     },
-    status: {
-      type: String,
-      trim: true,
-      default: "Hey there! I am using whatsapp",
-    },
+
     lastSeen: String,
   },
   { timestamps: true, collection: "users" }
