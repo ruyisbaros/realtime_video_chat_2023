@@ -6,6 +6,7 @@ const {
   createReFreshToken,
   verifyRefreshToken,
 } = require("../utils/createToken");
+const { findUser } = require("../services/userServices");
 
 const authCtrl = {
   register: async (req, res) => {
@@ -53,12 +54,9 @@ const authCtrl = {
   login: async (req, res) => {
     try {
       const { email, password, username } = req.body;
-      let user;
-      if (email) {
-        user = await User.findOne({ email: email.toLowerCase() });
-      } else if (username) {
-        user = await User.findOne({ username: username.toLowerCase() });
-      }
+
+      const user = await findUser(username, email);
+      console.log(user);
       if (!user) {
         return res.status(500).json({ message: `Wrong credentials!` });
       }
@@ -87,7 +85,7 @@ const authCtrl = {
           email: user.email,
           name: user.name,
           picture: user.picture,
-          username: newUser.username,
+          username: user.username,
         },
       });
     } catch (error) {
@@ -115,7 +113,7 @@ const authCtrl = {
       const { id } = await verifyRefreshToken(token);
       if (!id) return res.status(500).json({ message: "Please login again" });
 
-      const user = await User.findOne({ _id: id }).select("-password");
+      const user = await User.findOne({ _id: id });
       //console.log(user)
       if (!user)
         return res.status(500).json({ message: "Please login again!" });

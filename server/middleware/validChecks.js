@@ -44,10 +44,12 @@ exports.validateLogin = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Please provide your email address or username" });
-  } else if (!validateEmail(email)) {
-    return res
-      .status(500)
-      .json({ message: "Invalid email. Please provide a valid email" });
+  } else if (email) {
+    if (!validateEmail(email)) {
+      return res
+        .status(500)
+        .json({ message: "Invalid email. Please provide a valid email" });
+    }
   }
   if (!password) {
     return res.status(500).json({ message: "Please provide your password" });
