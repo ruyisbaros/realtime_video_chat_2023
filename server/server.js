@@ -10,7 +10,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const compression = require("compression");
 //const fileUpload = require("express-fileupload");
 const { Server } = require("socket.io");
-//const { socketServer } = require("./SocketServer");
+const { socketServer } = require("./SocketServer");
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static(__dirname + "/public"));
 app.use(compression());
-//app.use(fileUpload({ useTempFiles: true }));
+
 //Security middleware
 app.use(mongoSanitize());
 app.set("trust proxy", 1);
@@ -93,7 +93,7 @@ app.use("/api/v1/auth", routes.authRoutes);
 
 //Socket functions
 io.on("connection", (socket) => {
-  //socketServer(socket, io);
+  socketServer(socket, io);
 });
 
 const port = process.env.PORT || 5001;
