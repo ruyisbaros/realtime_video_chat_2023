@@ -63,6 +63,51 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+.auth-btn:disabled {
+  background: #313d45;
+}
+.auth-btn.auth-log {
+  position: relative;
+}
+.auth-btn.auth-reg {
+  position: relative;
+}
+.auth-btn.auth-log::before {
+  content: attr(data-hover);
+  position: absolute;
+  top: -110%;
+  width: 100px;
+  height: 30px;
+  background: #ddd;
+  color: #222;
+  border-radius: 3px;
+  padding: 5px;
+  text-transform: lowercase;
+  font-weight: normal;
+  opacity: 0;
+}
+.auth-btn.auth-log:hover::before {
+  opacity: 1;
+}
+.auth-btn.auth-reg::before {
+  content: attr(data-hover);
+  position: absolute;
+  top: -110%;
+  width: 130px;
+  height: 30px;
+  background: #ddd;
+  color: #222;
+  border-radius: 3px;
+  padding: 5px;
+  text-transform: lowercase;
+  font-weight: normal;
+
+  opacity: 0;
+}
+.auth-btn.auth-reg:hover::before {
+  opacity: 1;
+}
+
 .auth-forward-box {
   margin-top: 10px;
   color: #bbb;
@@ -70,6 +115,7 @@
 .auth-forward {
   margin-left: 5px;
   transition: all 0.4s;
+  color: #53bdeb;
 }
 .auth-forward:hover {
   text-decoration: underline;

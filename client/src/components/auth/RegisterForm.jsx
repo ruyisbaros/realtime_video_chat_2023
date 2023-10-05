@@ -97,7 +97,16 @@ const RegisterForm = () => {
               )}
             </span>
           </div>
-          <button type="submit" className="btn auth-btn">
+          <button
+            type="submit"
+            className="btn auth-btn auth-reg"
+            disabled={!regUser.email || !regUser.password || !regUser.name}
+            data-hover={
+              !regUser.email || !regUser.password || !regUser.name
+                ? "Fill infos before Register!"
+                : "Click for Register"
+            }
+          >
             {status ? <PulseLoader color="#fff" size={14} /> : "Register"}
           </button>
           <p className="auth-forward-box">

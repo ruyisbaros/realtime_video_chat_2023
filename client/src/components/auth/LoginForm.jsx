@@ -88,7 +88,16 @@ const LoginForm = () => {
               )}
             </span>
           </div>
-          <button type="submit" className="btn auth-btn">
+          <button
+            type="submit"
+            className="btn auth-btn auth-log"
+            disabled={!logUser.email || !logUser.password}
+            data-hover={
+              !logUser.email || !logUser.password
+                ? "Fill infos before Login!"
+                : "Click for Login"
+            }
+          >
             {status ? <PulseLoader color="#fff" size={14} /> : "Login"}
           </button>
           <p className="auth-forward-box">
