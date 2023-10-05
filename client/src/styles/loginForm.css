@@ -4,7 +4,8 @@
   background: #111b21;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 20rem;
 }
 .login-logo {
   width: 300px;
@@ -72,7 +73,7 @@
 .auth-btn.auth-reg {
   position: relative;
 }
-.auth-btn.auth-log::before {
+.auth-btn.auth-log:disabled:before {
   content: attr(data-hover);
   position: absolute;
   top: -110%;
@@ -89,7 +90,7 @@
 .auth-btn.auth-log:hover::before {
   opacity: 1;
 }
-.auth-btn.auth-reg::before {
+.auth-btn.auth-reg:disabled:before {
   content: attr(data-hover);
   position: absolute;
   top: -110%;
@@ -126,5 +127,17 @@
   top: 17%;
   right: 22%;
   cursor: pointer;
+  z-index: 10;
+}
+.valid_check_email {
+  position: absolute;
+  top: 17%;
+  right: 15%;
+  z-index: 10;
+}
+.valid_check_pwd {
+  position: absolute;
+  top: 17%;
+  right: 15%;
   z-index: 10;
 }

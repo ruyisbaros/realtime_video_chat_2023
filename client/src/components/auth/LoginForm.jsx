@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/online_meeting.png";
 import { Link } from "react-router-dom";
 import { AiOutlineEye } from "react-icons/ai";
@@ -23,7 +23,7 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      setStatus(false);
+      setStatus(true);
       const { data } = await axios.post("/auth/login", { ...logUser });
       console.log(data.user);
       setStatus(false);
@@ -39,6 +39,7 @@ const LoginForm = () => {
       toast.error(error.response.data.message);
     }
   };
+  /* /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/ */
   return (
     <div className="boxWrapper">
       <img src={logo} alt="" className="login-logo" />

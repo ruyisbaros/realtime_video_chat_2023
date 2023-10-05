@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/online_meeting.png";
 import { Link } from "react-router-dom";
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineDislike } from "react-icons/ai";
 import { PulseLoader } from "react-spinners";
 import axios from "../../axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { reduxRegisterUser } from "../../redux/currentUserSlice";
+import { validateEmail, validatePassword } from "../../utils/validators";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const [regUser, setRegUser] = useState({ name: "", email: "", password: "" });
+  const { email, password } = regUser;
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState(false);
 
@@ -19,11 +23,21 @@ const RegisterForm = () => {
     const { name, value } = e.target;
     setRegUser({ ...regUser, [name]: value });
   };
+  const [passwordIsValid, setPasswordIsValid] = useState(true);
+  const [emailIsValid, setEmailIsValid] = useState(true);
+
+  useEffect(() => {
+    setPasswordIsValid(validatePassword(password));
+  }, [password]);
+  useEffect(() => {
+    setEmailIsValid(validateEmail(email));
+  }, [email]);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      setStatus(false);
-      const { data } = await axios.post("/auth/login", { ...regUser });
+      setStatus(true);
+      const { data } = await axios.post("/auth/register", { ...regUser });
       console.log(data.user);
       setStatus(false);
       window.localStorage.setItem(
@@ -31,7 +45,7 @@ const RegisterForm = () => {
         JSON.stringify(data.user)
       );
       await dispatch(reduxRegisterUser(data.user));
-      setRegUser({ email: "", password: "" });
+      setRegUser({ email: "", password: "", name: "" });
       toast.success(data.message);
     } catch (error) {
       setStatus(false);
@@ -50,7 +64,7 @@ const RegisterForm = () => {
               marginBottom: "3rem",
             }}
           >
-            Welcome Back
+            Join us
           </h2>
           {/* <h6 style={{ color: "#b9bbbe", textAlign: "center" }}>
             We are happy that you are with us :)
@@ -67,7 +81,7 @@ const RegisterForm = () => {
               onChange={handleInputs}
             />
           </div>
-          <div className="custom_input">
+          <div className="custom_input pwd-box">
             <input
               type="email"
               placeholder="Enter your email"
@@ -76,6 +90,15 @@ const RegisterForm = () => {
               value={regUser.email}
               onChange={handleInputs}
             />
+            {email.length > 0 && (
+              <span className="valid_check_email">
+                {emailIsValid ? (
+                  <AiOutlineLike color="green" />
+                ) : (
+                  <AiOutlineDislike color="red" />
+                )}
+              </span>
+            )}
           </div>
           <div className="custom_input pwd-box">
             <input
@@ -96,6 +119,15 @@ const RegisterForm = () => {
                 <AiOutlineEyeInvisible size={20} />
               )}
             </span>
+            {password.length > 0 && (
+              <span className="valid_check_pwd">
+                {passwordIsValid ? (
+                  <AiOutlineLike color="green" />
+                ) : (
+                  <AiOutlineDislike color="red" />
+                )}
+              </span>
+            )}
           </div>
           <button
             type="submit"
