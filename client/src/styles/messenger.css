@@ -1,0 +1,13 @@
+.messenger-main {
+  flex: 4;
+  background: #36393f;
+}
+.messenger-main header {
+  height: 48px;
+  border-bottom: 1px solid black;
+  background: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+}
