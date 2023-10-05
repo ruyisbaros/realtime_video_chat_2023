@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo from "../../assets/online_meeting.png";
 import { Link } from "react-router-dom";
 import { AiOutlineEye } from "react-icons/ai";
