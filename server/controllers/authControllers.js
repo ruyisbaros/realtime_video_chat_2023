@@ -56,7 +56,7 @@ const authCtrl = {
       const { email, password, username } = req.body;
 
       const user = await findUser(username, email);
-      console.log(user);
+      // console.log(user);
       if (!user) {
         return res.status(500).json({ message: `Wrong credentials!` });
       }
