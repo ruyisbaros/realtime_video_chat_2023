@@ -27,6 +27,18 @@ const userSchema = new mongoose.Schema(
       default:
         "https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png",
     },
+    invitations: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
+    friends: [
+      {
+        type: ObjectId,
+        ref: "User",
+      },
+    ],
 
     lastSeen: String,
   },

@@ -1,6 +1,24 @@
 import React from "react";
 import FriendsList from "./FriendsList";
 
+const dummyFriends = [
+  {
+    id: 1,
+    name: "Ahmet",
+    isOnline: true,
+  },
+  {
+    id: 2,
+    name: "Ruya",
+    isOnline: false,
+  },
+  {
+    id: 3,
+    name: "Baran",
+    isOnline: true,
+  },
+];
+
 const FriendsBar = ({ setOpenAddFriendBox }) => {
   return (
     <div className="friendsBar_main">
@@ -12,7 +30,9 @@ const FriendsBar = ({ setOpenAddFriendBox }) => {
       </button>
       <div className="friendsBar-container">
         <h2>Private Messages</h2>
-        <FriendsList />
+        {dummyFriends.map((friend) => (
+          <FriendsList key={friend.id} friend={friend} />
+        ))}
       </div>
     </div>
   );

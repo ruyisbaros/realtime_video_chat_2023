@@ -130,7 +130,6 @@ const authCtrl = {
           email: user.email,
           name: user.name,
           picture: user.picture,
-          username: newUser.username,
         },
       });
     } catch (error) {

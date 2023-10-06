@@ -8,7 +8,6 @@
 /* Sidebar */
 .sidebar-main {
   flex: 1;
-
   width: 100%;
   height: 100%;
   display: flex;
@@ -36,19 +35,54 @@
   overflow-y: auto;
 }
 /* FriendsBar */
-.friendsBar_main {
-}
-.friendsBar-container {
-}
+
 .friendsBar-container h2,
 .invitations-container h2 {
   color: #ddd;
   font-size: 14px;
   margin-top: 10px;
   text-align: center;
+  margin-bottom: 1.5rem;
 }
+
 .my_friends {
   width: 100%;
+}
+.friend {
+  width: 70%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 2rem;
+  background: #3e7b96;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  padding-left: 1rem;
+  height: 42px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.isUser-online {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -30px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.friend:hover {
+  background: #34667c;
+}
+.friend-name {
+  color: #fff;
+}
+.friend-picture img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .sidebar-right_bottom {
   height: 50%;
@@ -57,6 +91,71 @@
 .manage-opacity {
   opacity: 0.6;
 }
+.inviter {
+  width: 90%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  background: #025144;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  padding: 0 10px;
+  height: 42px;
+  transition: all 0.3s;
+}
+
+.inviter-name {
+  color: #fff;
+  flex: 1;
+}
+.inviter-picture {
+  flex: 1;
+}
+.inviter-picture img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.inviter::before {
+  content: attr(data-mail);
+  position: absolute;
+  top: -110%;
+  width: 100px;
+  /* height: 30px; */
+  background: #222;
+  color: #fff;
+  border-radius: 3px;
+  padding: 5px;
+  text-transform: lowercase;
+  font-weight: normal;
+  text-align: center;
+  display: none;
+}
+.inviter:hover::before {
+  display: block;
+}
+.decision-buttons {
+  flex: 4;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+}
+.decision-buttons button {
+  padding: 3px 5px;
+  font-size: 12px;
+  border-radius: 3px;
+  color: #ddd;
+}
+.invite-accept {
+  background: green;
+}
+.invite-reject {
+  background: red;
+}
+/* Invite friend Box */
 .invite_friend_box {
   position: absolute;
   width: 100%;
@@ -67,9 +166,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
   z-index: 99;
   color: #fff;
+}
+.invite_friend_content {
+  position: relative;
+  width: 30%;
+  height: fit-content;
+  background: #333;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.invite_friend_content h2 {
+  margin-bottom: 1rem;
+}
+.invite_friend_content input {
+  width: 70%;
+  height: 30px;
+  display: block;
+  margin: 10px auto 0 auto;
+  outline: none;
+  padding: 0 10px;
+}
+.close_dialog {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  background: red;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
 }
 /* ICONS with Buttons*/
 .group-icon-btn {
@@ -89,4 +221,16 @@
   background: #3ba55d;
   border-radius: 6px;
   font-weight: 600;
+}
+.send_invitation_btn {
+  display: block;
+  color: #fff;
+  background: #3ba55d;
+  width: 30%;
+  height: 30px;
+  font-weight: bold;
+  margin: 1rem auto;
+  margin-bottom: 0;
+  letter-spacing: 0.6px;
+  border-radius: 4px;
 }

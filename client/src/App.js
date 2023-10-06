@@ -24,6 +24,7 @@ const App = () => {
       await dispatch(reduxRegisterUser(data.user));
     } catch (error) {
       console.log(error.response.data.message);
+      console.log(error.response.data.message);
     }
   }, [dispatch]);
   useEffect(() => {
