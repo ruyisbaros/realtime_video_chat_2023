@@ -24,6 +24,19 @@ exports.socketServer = (socket, io) => {
         lastSeen: date,
       });
     }
-    socket.broadcast.emit("offlineUsers", user?.id);
+    socket.broadcast.emit("user got offline", user?.id);
+  });
+  socket.on("logout", async (id) => {
+    const user = users.find((u) => u.id === id);
+    users = users.filter((user) => user.socketId !== socket.id);
+    //console.log(users);
+    //console.log(user);
+    const date = new Date();
+    if (user) {
+      await User.findByIdAndUpdate(user.id, {
+        lastSeen: date,
+      });
+    }
+    socket.broadcast.emit("user got offline", user?.id);
   });
 };

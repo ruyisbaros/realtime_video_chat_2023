@@ -9,11 +9,25 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import axios from "./axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reduxRegisterUser } from "./redux/currentUserSlice";
+import { connectToSocketServer, joinUser } from "./SocketIOConnection";
 
 const App = () => {
   const dispatch = useDispatch();
+  const { loggedUser } = useSelector((store) => store.currentUser);
+  //Web socket actions
+  useEffect(() => {
+    connectToSocketServer();
+  }, []);
+
+  /* Join room */
+  useEffect(() => {
+    if (loggedUser) {
+      joinUser(loggedUser.id);
+    }
+  }, [loggedUser]);
+
   const reFreshToken = useCallback(async () => {
     try {
       const { data } = await axios.get("/auth/refresh_token");

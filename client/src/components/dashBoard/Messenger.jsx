@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from "../../axios";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reduxLogout } from "../../redux/currentUserSlice";
+import { logoutDisconnect } from "../../SocketIOConnection";
+
 const Messenger = () => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
-
+  const { loggedUser } = useSelector((store) => store.currentUser);
   const handleLogout = async () => {
     try {
       await axios.get("/auth/logout");
       dispatch(reduxLogout());
       window.localStorage.removeItem("registeredUserDiscord");
+      logoutDisconnect(loggedUser.id);
     } catch (error) {
       toast.error(error.response.data.message);
     }
