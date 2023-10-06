@@ -1,13 +1,19 @@
 import React from "react";
 import InvitationsBar from "./InvitationsBar";
 import FriendsBar from "./FriendsBar";
-const Sidebar = () => {
+import { IoIosPeople } from "react-icons/io";
+
+const Sidebar = ({ setOpenAddFriendBox }) => {
   return (
     <div className="sidebar-main">
-      <div className="sidebar-left">Left</div>
+      <div className="sidebar-left">
+        <button className="group-icon-btn">
+          <IoIosPeople size={20} />
+        </button>
+      </div>
       <div className="sidebar-right">
         <div className="sidebar-right_top">
-          <FriendsBar />
+          <FriendsBar setOpenAddFriendBox={setOpenAddFriendBox} />
         </div>
         <div className="sidebar-right_bottom">
           <InvitationsBar />
