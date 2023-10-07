@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../components/dashBoard/Sidebar";
 import Messenger from "./../components/dashBoard/Messenger";
 import { VscChromeClose } from "react-icons/vsc";

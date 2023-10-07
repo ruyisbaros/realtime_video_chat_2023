@@ -4,13 +4,19 @@
 }
 .messenger-main header {
   position: relative;
-  height: 48px;
+  height: 55px;
   border-bottom: 1px solid black;
   background: inherit;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
+}
+.profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .drop-btn {
   width: 30px;

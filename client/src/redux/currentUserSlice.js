@@ -2,10 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 //import Cookies from "js-cookie";
 const user = window.localStorage.getItem("registeredUserDiscord");
 let onUsers = window.localStorage.getItem("onlineUsersDiscord");
+const mySocket = window.localStorage.getItem("mySocketDiscord");
 const initialState = {
   loggedUser: user ? JSON.parse(user) : null,
   onLineUsers: onUsers ? JSON.parse(onUsers) : [],
-  mySocketId: null,
+  mySocketId: mySocket ? JSON.parse(mySocket) : null,
 };
 
 const currentUSlicer = createSlice({
@@ -14,6 +15,7 @@ const currentUSlicer = createSlice({
   reducers: {
     reduxLogout: (state, action) => {
       state.loggedUser = null;
+      state.mySocketId = null;
     },
 
     reduxRegisterUser: (state, action) => {
@@ -22,6 +24,9 @@ const currentUSlicer = createSlice({
     },
     reduxSetOnlineUsers: (state, action) => {
       state.onLineUsers = action.payload;
+      state.onLineUsers = state.onLineUsers.filter(
+        (usr) => usr.id !== state.loggedUser.id
+      );
     },
     reduxAUserBecameOffline: (state, action) => {
       state.onLineUsers = state.onLineUsers.filter(

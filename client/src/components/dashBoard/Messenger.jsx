@@ -23,7 +23,7 @@ const Messenger = () => {
   return (
     <div className="messenger-main">
       <header>
-        Header
+        <img src={loggedUser.picture} alt="" className="profile-photo" />
         <button
           className="drop-btn"
           onClick={() => setShowDrop((prev) => !prev)}

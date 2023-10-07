@@ -8,7 +8,7 @@ import axios from "../../axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { reduxRegisterUser } from "../../redux/currentUserSlice";
-
+import { connectWithSocketServer, joinUser } from "../../SocketIOConnection";
 const LoginForm = () => {
   const dispatch = useDispatch();
   const [logUser, setLogUser] = useState({ email: "", password: "" });
@@ -32,6 +32,8 @@ const LoginForm = () => {
         JSON.stringify(data.user)
       );
       await dispatch(reduxRegisterUser(data.user));
+      connectWithSocketServer();
+      joinUser(data?.user?.id);
       setLogUser({ email: "", password: "" });
       toast.success(data.message);
     } catch (error) {

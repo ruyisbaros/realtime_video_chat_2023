@@ -2,6 +2,7 @@ const User = require("./models/userModel");
 let users = [];
 exports.socketServer = (socket, io) => {
   console.log(`User with ${socket.id} connected`);
+  //User status listen
   //Join User (Online)
   socket.on("joinUser", (id) => {
     const user = users.find((user) => user.id === id);
@@ -39,4 +40,6 @@ exports.socketServer = (socket, io) => {
     }
     socket.broadcast.emit("user got offline", user?.id);
   });
+
+  //Users messages listen
 };
