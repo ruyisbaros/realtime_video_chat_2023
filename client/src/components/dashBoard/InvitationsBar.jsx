@@ -13,7 +13,7 @@ const InvitationsBar = () => {
     {
       _id: 2,
       senderInfo: {
-        name: "Sikicisi",
+        name: "Saver",
         email: "s@a.com",
       },
     },

@@ -88,7 +88,7 @@ mongoose.set("strictPopulate", false);
 //Routes
 app.use("", routes.healthRoutes);
 app.use("/api/v1/auth", routes.authRoutes);
-//app.use("/api/v1/conversation", routes.conversationRoutes);
+app.use("/api/v1/friends", routes.friendsRoutes);
 //app.use("/api/v1/message", routes.messageRoutes);
 
 //Socket functions

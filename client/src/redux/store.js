@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import currentUserSlice from "./currentUserSlice";
-import invitesSlice from "./invitesSlice";
+import invitesSlice from "./invitationsSlice";
 import FriendsSlice from "./FriendsSlice";
 import chatSlice from "./chatSlice";
 import socketSlicer from "./socketSlicer";
@@ -8,7 +8,7 @@ import socketSlicer from "./socketSlicer";
 export const store = configureStore({
   reducer: {
     currentUser: currentUserSlice,
-    invites: invitesSlice,
+    Invitations: invitesSlice,
     friends: FriendsSlice,
     messages: chatSlice,
     sockets: socketSlicer,
