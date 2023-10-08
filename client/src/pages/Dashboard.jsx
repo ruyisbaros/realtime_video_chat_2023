@@ -5,6 +5,7 @@ import { VscChromeClose } from "react-icons/vsc";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../axios";
+import { PulseLoader } from "react-spinners";
 import { reduxMakeTokenExpired } from "../redux/currentUserSlice";
 import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
@@ -13,6 +14,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const [openAddFriendBox, setOpenAddFriendBox] = useState(false);
   const [invitedMail, setInvitedMail] = useState("");
+  const [status, setStatus] = useState(true);
 
   const fetchMyFriendsAndInvitations = useCallback(async () => {
     try {
@@ -34,7 +36,19 @@ const Dashboard = () => {
     fetchMyFriendsAndInvitations();
   }, [fetchMyFriendsAndInvitations]);
 
-  const handleSendInvitation = () => {};
+  const handleSendInvitation = async () => {
+    try {
+      setStatus(true);
+      const { data } = await axios.get(
+        `/friends/invite_friends/${invitedMail}`
+      );
+      console.log(data);
+      setStatus(false);
+    } catch (error) {
+      setStatus(false);
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <>
       <div
@@ -59,7 +73,7 @@ const Dashboard = () => {
               disabled={!invitedMail}
               onClick={handleSendInvitation}
             >
-              Send
+              {status ? <PulseLoader color="#fff" size={14} /> : "Send"}
             </button>
             <span
               className="close_dialog"
