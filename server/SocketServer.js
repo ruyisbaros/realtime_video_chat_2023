@@ -4,10 +4,10 @@ exports.socketServer = (socket, io) => {
   console.log(`User with ${socket.id} connected`);
   //User status listen
   //Join User (Online)
-  socket.on("joinUser", ({ id, email }) => {
+  socket.on("joinUser", (id) => {
     const user = users.find((user) => user.id === id);
     if (!user) {
-      users.push({ id, email, socketId: socket.id });
+      users.push({ id, socketId: socket.id });
       socket.broadcast.emit("onlineUsers", users);
     }
     socket.emit("setup socketId", socket.id);
@@ -41,5 +41,16 @@ exports.socketServer = (socket, io) => {
     socket.broadcast.emit("user got offline", user?.id);
   });
 
-  //Users messages listen
+  //Users invitations actions listen
+  socket.on("invite friend", async ({ invitedMail, inviterUser }) => {
+    console.log(invitedMail, inviterUser);
+    const invitedUser = await User.findOne({ email: invitedMail });
+    console.log(String(invitedUser._id));
+    const user = users.find((u) => String(u.id) === String(invitedUser._id));
+    console.log(user);
+    if (user) {
+      console.log(user);
+      socket.to(`${user.socketId}`).emit("got invitation", inviterUser);
+    }
+  });
 };

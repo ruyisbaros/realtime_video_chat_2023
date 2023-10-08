@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const makeInvitesSlice = createSlice({
-  name: "Invitations",
+  name: "invitations",
   initialState,
   reducers: {
     reduxFetchMyInvitations: (state, action) => {

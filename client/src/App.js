@@ -11,7 +11,7 @@ import Register from "./pages/Register";
 import axios from "./axios";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxLogout, reduxRegisterUser } from "./redux/currentUserSlice";
-import { connectToSocketServer } from "./SocketIOConnection";
+import { connectToSocketServer, joinUser } from "./SocketIOConnection";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,12 +24,11 @@ const App = () => {
   }, [loggedUser]);
 
   /* Join room */
-  /* useEffect(() => {
+  useEffect(() => {
     if (loggedUser) {
       joinUser(loggedUser.id);
     }
-  }, [loggedUser]); */
-
+  }, [loggedUser]);
   const reFreshToken = useCallback(async () => {
     try {
       const { data } = await axios.get("/auth/refresh_token");

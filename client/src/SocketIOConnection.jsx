@@ -14,11 +14,15 @@ import {
 } from "./redux/currentUserSlice";
 
 import { createSocket } from "./redux/socketSlicer";
+import { reduxAddMyInvitations } from "./redux/invitationsSlice";
 let socket;
 
 export const connectWithSocketServer = () => {
   socket = io(BACKEND_URL);
+};
 
+export const connectToSocketServer = () => {
+  socket = io(BACKEND_URL);
   socket.on("connect", () => {
     console.log("Connected to socket io server");
     store.dispatch(createSocket(socket));
@@ -28,13 +32,8 @@ export const connectWithSocketServer = () => {
     window.localStorage.setItem("mySocketDiscord", JSON.stringify(id));
     store.dispatch(reduxSetMySocketId(id));
   });
-};
-
-export const connectToSocketServer = () => {
-  socket = io(BACKEND_URL);
-
-  //Users status listen
   socket.on("onlineUsers", (users) => {
+    console.log(users);
     window.localStorage.setItem("onlineUsersDiscord", JSON.stringify(users));
     store.dispatch(reduxSetOnlineUsers(users));
   });
@@ -45,6 +44,11 @@ export const connectToSocketServer = () => {
     window.localStorage.setItem("onlineUsersDiscord", JSON.stringify(onUsers));
     window.localStorage.removeItem("mySocketDiscord");
     store.dispatch(reduxAUserBecameOffline(id));
+  });
+
+  socket.on("got invitation", (user) => {
+    console.log(user);
+    store.dispatch(reduxAddMyInvitations(user));
   });
   //Users messages listen
   socket.on("new message", (msg) => {
@@ -61,16 +65,17 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxStopTyping({ situation: false, convo, message }));
   });
 };
+
 //Emit user activities
-export const joinUser = ({ id, email }) => {
-  socket?.emit("joinUser", { id, email });
+export const joinUser = (id) => {
+  socket?.emit("joinUser", id);
 };
 export const logoutDisconnect = (id) => {
   socket?.emit("logout", id);
 };
 
-export const inviteFriend = (email) => {
-  socket.emit("invite friend", email);
+export const inviteFriend = ({ invitedMail, inviterUser }) => {
+  socket.emit("invite friend", { invitedMail, inviterUser });
 };
 export const acceptInvite = (email) => {
   socket.emit("accept invite", email);

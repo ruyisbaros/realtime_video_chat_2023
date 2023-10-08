@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 //import Cookies from "js-cookie";
 const user = window.localStorage.getItem("registeredUserDiscord");
-let onUsers = window.localStorage.getItem("onlineUsersDiscord");
+const onUsers = window.localStorage.getItem("onlineUsersDiscord");
 const mySocket = window.localStorage.getItem("mySocketDiscord");
 const initialState = {
-  loggedUser: user ? JSON.parse(user) : null,
-  onLineUsers: onUsers ? JSON.parse(onUsers) : [],
-  mySocketId: mySocket ? JSON.parse(mySocket) : null,
+  loggedUser: user || user !== "undefined" ? JSON.parse(user) : null,
+  onLineUsers:
+    onUsers !== "undefined" || onUsers.length > 0 ? JSON.parse(onUsers) : [],
+  mySocketId:
+    mySocket || mySocket !== "undefined" ? JSON.parse(mySocket) : null,
 };
 
 const currentUSlicer = createSlice({

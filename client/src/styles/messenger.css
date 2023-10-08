@@ -1,5 +1,5 @@
 .messenger-main {
-  flex: 4;
+  flex: 3;
   background: #36393f;
 }
 .messenger-main header {
@@ -42,4 +42,10 @@
   border-radius: 5px;
   font-weight: 500;
   cursor: pointer;
+}
+
+@media (max-width: 1300px) {
+  .messenger-main {
+    flex: 3;
+  }
 }

@@ -8,7 +8,7 @@ import socketSlicer from "./socketSlicer";
 export const store = configureStore({
   reducer: {
     currentUser: currentUserSlice,
-    Invitations: invitesSlice,
+    invitations: invitesSlice,
     friends: FriendsSlice,
     messages: chatSlice,
     sockets: socketSlicer,

@@ -2,19 +2,21 @@ import React, { useCallback, useEffect, useState } from "react";
 import Sidebar from "../components/dashBoard/Sidebar";
 import Messenger from "./../components/dashBoard/Messenger";
 import { VscChromeClose } from "react-icons/vsc";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../axios";
 import { PulseLoader } from "react-spinners";
 import { reduxLogout } from "../redux/currentUserSlice";
 import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
+import { inviteFriend } from "../SocketIOConnection";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const [openAddFriendBox, setOpenAddFriendBox] = useState(false);
   const [invitedMail, setInvitedMail] = useState("");
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
+  const { loggedUser } = useSelector((store) => store.currentUser);
 
   const fetchMyFriendsAndInvitations = useCallback(async () => {
     try {
@@ -22,7 +24,15 @@ const Dashboard = () => {
       console.log(data);
 
       dispatch(reduxFetchMyFriends(data?.friends));
+      window.localStorage.setItem(
+        "friendsDiscord",
+        JSON.stringify(data?.friends)
+      );
       dispatch(reduxFetchMyInvitations(data?.invitations));
+      window.localStorage.setItem(
+        "invitationsDiscord",
+        JSON.stringify(data?.invitations)
+      );
     } catch (error) {
       if (error.response.data.message === "jwt expired") {
         dispatch(reduxLogout());
@@ -43,6 +53,11 @@ const Dashboard = () => {
         `/friends/invite_friends/${invitedMail}`
       );
       console.log(data);
+      //Socket emit
+      inviteFriend({
+        invitedMail: invitedMail,
+        inviterUser: loggedUser,
+      });
       setStatus(false);
       toast.success(data?.message);
       setOpenAddFriendBox(false);

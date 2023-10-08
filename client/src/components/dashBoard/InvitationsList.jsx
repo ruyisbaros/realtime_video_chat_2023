@@ -10,14 +10,11 @@ const InvitationsList = ({ inv }) => {
 
   return (
     <div className="my_invitations">
-      <div className="inviter" data-mail={inv.senderInfo.email}>
+      <div className="inviter" data-mail={inv.email}>
         <div className="inviter-picture">
-          <img
-            src="https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png"
-            alt=""
-          />
+          <img src={inv.picture} alt="" />
         </div>
-        <div className="inviter-name ">{inv.senderInfo.name}</div>
+        <div className="inviter-name ">{inv.name.slice(0, 10)}...</div>
         <div className="decision-buttons">
           <button className="invite-accept" onClick={acceptInvitation}>
             Accept

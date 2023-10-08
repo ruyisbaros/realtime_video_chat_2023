@@ -1,19 +1,22 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const FriendsList = ({ friend }) => {
+  const { onlineUsers } = useSelector((store) => store.currentUser);
   return (
     <div className="my_friends">
       <div className="friend">
         <div className="friend-picture">
-          <img
-            src="https://res.cloudinary.com/dmhcnhtng/image/upload/v1643044376/avatars/default_pic_jeaybr.png"
-            alt=""
-          />
+          <img src={friend.picture} alt="" />
         </div>
         <div className="friend-name">{friend.name}</div>
         <span
           className="isUser-online"
-          style={{ background: friend.isOnline ? "#3ba55d" : "" }}
+          style={{
+            background: onlineUsers.find((usr) => usr.id === friend._id)
+              ? "#3ba55d"
+              : "",
+          }}
         ></span>
       </div>
     </div>
