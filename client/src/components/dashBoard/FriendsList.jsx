@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const FriendsList = ({ friend }) => {
-  console.log(friend);
+  //console.log(friend);
   const { onlineUsers } = useSelector((store) => store.currentUser);
 
   return (

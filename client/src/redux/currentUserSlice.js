@@ -8,7 +8,7 @@ const initialState = {
   onlineUsers: onUsers.length > 0 ? JSON.parse(onUsers) : [],
   mySocketId: mySocket ? JSON.parse(mySocket) : null,
 };
-console.log(JSON.parse(onUsers));
+//console.log(JSON.parse(onUsers));
 const currentUSlicer = createSlice({
   name: "currentUser",
   initialState,

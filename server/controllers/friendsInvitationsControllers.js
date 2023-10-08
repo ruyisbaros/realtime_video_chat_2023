@@ -7,7 +7,7 @@ const friendsInvCtrl = {
         .populate("friends", "-password")
         .populate("invitations", "-password");
       if (!user) {
-        res.status(500).json({ message: "You should sign in!" });
+        return res.status(500).json({ message: "You should sign in!" });
       }
       res
         .status(200)
@@ -21,9 +21,20 @@ const friendsInvCtrl = {
       const { email } = req.params;
       const invitedUser = await User.findOne({ email });
       if (!invitedUser) {
-        res.status(500).json({ message: `No user found with ${email} email!` });
+        return res
+          .status(500)
+          .json({ message: `No user found with ${email} email!` });
       }
-      //1.) Push me his/her invitations list
+      //1.) Check if he/she is already in friend list
+      const includes = await User.findOne({
+        friends: { $in: [invitedUser._id] },
+      });
+      if (includes) {
+        return res.status(500).json({
+          message: `User with ${email} emailId already in your friend list!`,
+        });
+      }
+      //2.) Push me his/her invitations list
       await invitedUser.updateOne({ $push: { invitations: req.user._id } });
 
       res.status(200).json({ message: "Your invite has been sent!" });
@@ -36,7 +47,9 @@ const friendsInvCtrl = {
       const { email } = req.params;
       const acceptedUser = await User.findOne({ email });
       if (!acceptedUser) {
-        res.status(500).json({ message: `No user found with ${email} email!` });
+        return res
+          .status(500)
+          .json({ message: `No user found with ${email} email!` });
       }
       //1.) Push me his/her friend list
       await acceptedUser.updateOne({ $push: { friends: req.user._id } });
@@ -67,7 +80,9 @@ const friendsInvCtrl = {
       const { email } = req.params;
       const rejectedUser = await User.findOne({ email });
       if (!rejectedUser) {
-        res.status(500).json({ message: `No user found with ${email} email!` });
+        return res
+          .status(500)
+          .json({ message: `No user found with ${email} email!` });
       }
       //Remove him/her from my invitations list
       await User.findByIdAndUpdate(
