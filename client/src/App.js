@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoggedInRoutes from "./ristrict_routes/LoggedInRoutes";
 import NotLoggedInRoutes from "./ristrict_routes/NotLoggedInRoutes";
@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import axios from "./axios";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxRegisterUser } from "./redux/currentUserSlice";
+import { reduxLogout, reduxRegisterUser } from "./redux/currentUserSlice";
 import { connectToSocketServer } from "./SocketIOConnection";
 
 const App = () => {
@@ -39,8 +39,8 @@ const App = () => {
       );
       await dispatch(reduxRegisterUser(data.user));
     } catch (error) {
-      console.log(error.response.data.message);
-      console.log(error.response.data.message);
+      dispatch(reduxLogout());
+      toast.error(error.response.data.message);
     }
   }, [dispatch]);
   useEffect(() => {

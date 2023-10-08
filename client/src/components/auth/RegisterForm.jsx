@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { reduxRegisterUser } from "../../redux/currentUserSlice";
 import { validateEmail, validatePassword } from "../../utils/validators";
+import { connectWithSocketServer, joinUser } from "../../SocketIOConnection";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,8 @@ const RegisterForm = () => {
         JSON.stringify(data.user)
       );
       await dispatch(reduxRegisterUser(data.user));
+      connectWithSocketServer();
+      joinUser({ id: data?.user?.id, email: data?.user?.email });
       setRegUser({ email: "", password: "", name: "" });
       toast.success(data.message);
     } catch (error) {

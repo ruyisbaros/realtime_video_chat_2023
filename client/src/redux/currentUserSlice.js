@@ -16,11 +16,9 @@ const currentUSlicer = createSlice({
     reduxLogout: (state, action) => {
       state.loggedUser = null;
       state.mySocketId = null;
-    },
-    reduxMakeTokenExpired: (state, action) => {
-      state.loggedUser = null;
       window.localStorage.removeItem("registeredUserDiscord");
     },
+
     reduxRegisterUser: (state, action) => {
       const { id, email, name, picture, username } = action.payload;
       state.loggedUser = { id, name, email, picture, username };
@@ -48,7 +46,6 @@ export const {
   reduxSetOnlineUsers,
   reduxAUserBecameOffline,
   reduxSetMySocketId,
-  reduxMakeTokenExpired,
 } = currentUSlicer.actions;
 
 export default currentUSlicer.reducer;

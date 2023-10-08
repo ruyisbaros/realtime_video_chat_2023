@@ -14,7 +14,6 @@ const Messenger = () => {
     try {
       await axios.get("/auth/logout");
       dispatch(reduxLogout());
-      window.localStorage.removeItem("registeredUserDiscord");
       logoutDisconnect(loggedUser.id);
     } catch (error) {
       toast.error(error.response.data.message);

@@ -4,10 +4,10 @@ exports.socketServer = (socket, io) => {
   console.log(`User with ${socket.id} connected`);
   //User status listen
   //Join User (Online)
-  socket.on("joinUser", (id) => {
+  socket.on("joinUser", ({ id, email }) => {
     const user = users.find((user) => user.id === id);
     if (!user) {
-      users.push({ id, socketId: socket.id });
+      users.push({ id, email, socketId: socket.id });
       socket.broadcast.emit("onlineUsers", users);
     }
     socket.emit("setup socketId", socket.id);

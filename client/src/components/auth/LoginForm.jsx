@@ -33,7 +33,7 @@ const LoginForm = () => {
       );
       await dispatch(reduxRegisterUser(data.user));
       connectWithSocketServer();
-      joinUser(data?.user?.id);
+      joinUser({ id: data?.user?.id, email: data?.user?.email });
       setLogUser({ email: "", password: "" });
       toast.success(data.message);
     } catch (error) {

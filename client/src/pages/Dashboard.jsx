@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../axios";
 import { PulseLoader } from "react-spinners";
-import { reduxMakeTokenExpired } from "../redux/currentUserSlice";
+import { reduxLogout } from "../redux/currentUserSlice";
 import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
 
@@ -25,7 +25,7 @@ const Dashboard = () => {
       dispatch(reduxFetchMyInvitations(data?.invitations));
     } catch (error) {
       if (error.response.data.message === "jwt expired") {
-        dispatch(reduxMakeTokenExpired());
+        dispatch(reduxLogout());
       } else {
         toast.error(error.response.data.message);
       }
@@ -44,6 +44,8 @@ const Dashboard = () => {
       );
       console.log(data);
       setStatus(false);
+      toast.success(data?.message);
+      setOpenAddFriendBox(false);
     } catch (error) {
       setStatus(false);
       toast.error(error.response.data.message);

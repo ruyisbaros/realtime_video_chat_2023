@@ -62,11 +62,21 @@ export const connectToSocketServer = () => {
   });
 };
 //Emit user activities
-export const joinUser = (id) => {
-  socket?.emit("joinUser", id);
+export const joinUser = ({ id, email }) => {
+  socket?.emit("joinUser", { id, email });
 };
 export const logoutDisconnect = (id) => {
   socket?.emit("logout", id);
+};
+
+export const inviteFriend = (email) => {
+  socket.emit("invite friend", email);
+};
+export const acceptInvite = (email) => {
+  socket.emit("accept invite", email);
+};
+export const rejectInvite = (email) => {
+  socket.emit("reject invite", email);
 };
 
 export const joinAConversation = (convo) => {
