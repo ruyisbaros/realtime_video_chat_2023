@@ -50,6 +50,14 @@ const friendsInvCtrl = {
         { _id: req.user._id },
         { friends: acceptedUser._id }
       );
+      res.status(200).json({
+        user: {
+          id: acceptedUser._id,
+          email: acceptedUser.email,
+          name: acceptedUser.name,
+          picture: acceptedUser.picture,
+        },
+      });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

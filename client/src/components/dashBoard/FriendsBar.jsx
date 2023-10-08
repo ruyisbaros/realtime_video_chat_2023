@@ -16,7 +16,7 @@ const FriendsBar = ({ setOpenAddFriendBox }) => {
         <h2>Private Messages</h2>
         {myFriends.length > 0 &&
           myFriends.map((friend) => (
-            <FriendsList key={friend.id} friend={friend} />
+            <FriendsList key={friend._id} friend={friend} />
           ))}
       </div>
     </div>

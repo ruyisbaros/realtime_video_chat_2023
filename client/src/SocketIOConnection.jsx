@@ -15,6 +15,7 @@ import {
 
 import { createSocket } from "./redux/socketSlicer";
 import { reduxAddMyInvitations } from "./redux/invitationsSlice";
+import { reduxAddMyFriends } from "./redux/FriendsSlice";
 let socket;
 
 export const connectWithSocketServer = () => {
@@ -33,7 +34,6 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxSetMySocketId(id));
   });
   socket.on("onlineUsers", (users) => {
-    console.log(users);
     window.localStorage.setItem("onlineUsersDiscord", JSON.stringify(users));
     store.dispatch(reduxSetOnlineUsers(users));
   });
@@ -47,8 +47,11 @@ export const connectToSocketServer = () => {
   });
 
   socket.on("got invitation", (user) => {
-    console.log(user);
+    //console.log(user);
     store.dispatch(reduxAddMyInvitations(user));
+  });
+  socket.on("invitation accepted", (user) => {
+    store.dispatch(reduxAddMyFriends(user));
   });
   //Users messages listen
   socket.on("new message", (msg) => {

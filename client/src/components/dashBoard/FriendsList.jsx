@@ -2,7 +2,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const FriendsList = ({ friend }) => {
+  console.log(friend);
   const { onlineUsers } = useSelector((store) => store.currentUser);
+
   return (
     <div className="my_friends">
       <div className="friend">
@@ -13,9 +15,9 @@ const FriendsList = ({ friend }) => {
         <span
           className="isUser-online"
           style={{
-            background: onlineUsers.find((usr) => usr.id === friend._id)
-              ? "#3ba55d"
-              : "",
+            background: `${
+              onlineUsers?.find((usr) => usr.id === friend._id) ? "#3ba55d" : ""
+            }`,
           }}
         ></span>
       </div>

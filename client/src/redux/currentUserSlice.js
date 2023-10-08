@@ -4,13 +4,11 @@ const user = window.localStorage.getItem("registeredUserDiscord");
 const onUsers = window.localStorage.getItem("onlineUsersDiscord");
 const mySocket = window.localStorage.getItem("mySocketDiscord");
 const initialState = {
-  loggedUser: user || user !== "undefined" ? JSON.parse(user) : null,
-  onLineUsers:
-    onUsers !== "undefined" || onUsers.length > 0 ? JSON.parse(onUsers) : [],
-  mySocketId:
-    mySocket || mySocket !== "undefined" ? JSON.parse(mySocket) : null,
+  loggedUser: user ? JSON.parse(user) : null,
+  onlineUsers: onUsers.length > 0 ? JSON.parse(onUsers) : [],
+  mySocketId: mySocket ? JSON.parse(mySocket) : null,
 };
-
+console.log(JSON.parse(onUsers));
 const currentUSlicer = createSlice({
   name: "currentUser",
   initialState,
@@ -26,13 +24,14 @@ const currentUSlicer = createSlice({
       state.loggedUser = { id, name, email, picture, username };
     },
     reduxSetOnlineUsers: (state, action) => {
-      state.onLineUsers = action.payload;
-      state.onLineUsers = state.onLineUsers.filter(
+      state.onlineUsers = action.payload;
+      state.onlineUsers = state.onlineUsers.filter(
         (usr) => usr.id !== state.loggedUser.id
       );
+      // console.log(state.onLineUsers);
     },
     reduxAUserBecameOffline: (state, action) => {
-      state.onLineUsers = state.onLineUsers.filter(
+      state.onlineUsers = state.onlineUsers.filter(
         (usr) => usr.id !== action.payload
       );
     },

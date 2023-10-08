@@ -8,7 +8,7 @@ const InvitationsBar = () => {
     <div className="invitations-container">
       <h2>Invitations</h2>
       {myInvitations.length > 0 &&
-        myInvitations.map((inv) => <InvitationsList key={inv._id} inv={inv} />)}
+        myInvitations.map((inv) => <InvitationsList key={inv.id} inv={inv} />)}
     </div>
   );
 };

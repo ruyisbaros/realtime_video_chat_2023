@@ -43,14 +43,22 @@ exports.socketServer = (socket, io) => {
 
   //Users invitations actions listen
   socket.on("invite friend", async ({ invitedMail, inviterUser }) => {
-    console.log(invitedMail, inviterUser);
+    //console.log(invitedMail, inviterUser);
     const invitedUser = await User.findOne({ email: invitedMail });
-    console.log(String(invitedUser._id));
+    //console.log(String(invitedUser._id));
     const user = users.find((u) => String(u.id) === String(invitedUser._id));
+    //console.log(user);
+    if (user) {
+      //console.log(user);
+      socket.to(`${user.socketId}`).emit("got invitation", inviterUser);
+    }
+  });
+  socket.on("invitation accepted", ({ id, accepter }) => {
+    const user = users.find((u) => String(u.id) === String(id));
     console.log(user);
     if (user) {
-      console.log(user);
-      socket.to(`${user.socketId}`).emit("got invitation", inviterUser);
+      //console.log(user);
+      socket.to(`${user.socketId}`).emit("invitation accepted", accepter);
     }
   });
 };

@@ -49,3 +49,8 @@
     flex: 3;
   }
 }
+@media (max-width: 1100px) {
+  .messenger-main {
+    flex: 2;
+  }
+}
