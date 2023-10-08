@@ -5,11 +5,14 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxLogout } from "../../redux/currentUserSlice";
 import { logoutDisconnect } from "../../SocketIOConnection";
+import DiscordInitial from "../chat/DiscordInitial";
+import ActiveChat from "./../chat/ActiveChat";
 
-const Messenger = () => {
+const Messenger = ({ messagesStatus }) => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
   const { loggedUser } = useSelector((store) => store.currentUser);
+  const { activeConversation } = useSelector((store) => store.messages);
   const handleLogout = async () => {
     try {
       await axios.get("/auth/logout");
@@ -37,6 +40,11 @@ const Messenger = () => {
           </div>
         )}
       </header>
+      {activeConversation ? (
+        <ActiveChat messagesStatus={messagesStatus} />
+      ) : (
+        <DiscordInitial />
+      )}
     </div>
   );
 };

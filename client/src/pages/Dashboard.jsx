@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [openAddFriendBox, setOpenAddFriendBox] = useState(false);
   const [invitedMail, setInvitedMail] = useState("");
   const [status, setStatus] = useState(false);
+  const [messagesStatus, setMessagesStatus] = useState(false);
   const { loggedUser } = useSelector((store) => store.currentUser);
 
   const fetchMyFriendsAndInvitations = useCallback(async () => {
@@ -71,8 +72,11 @@ const Dashboard = () => {
       <div
         className={`dash-wrapper ${openAddFriendBox ? "manage-opacity" : ""}`}
       >
-        <Sidebar setOpenAddFriendBox={setOpenAddFriendBox} />
-        <Messenger />
+        <Sidebar
+          setOpenAddFriendBox={setOpenAddFriendBox}
+          setMessagesStatus={setMessagesStatus}
+        />
+        <Messenger messagesStatus={messagesStatus} />
       </div>
       {openAddFriendBox && (
         <div className="invite_friend_box">

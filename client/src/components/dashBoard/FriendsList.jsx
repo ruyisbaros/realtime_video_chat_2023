@@ -1,13 +1,33 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import axios from "../../axios";
+import { reduxSetActiveConversation } from "../../redux/chatSlice";
 
-const FriendsList = ({ friend }) => {
+const FriendsList = ({ friend, setMessagesStatus }) => {
   //console.log(friend);
-  const { onlineUsers } = useSelector((store) => store.currentUser);
+  const dispatch = useDispatch();
+  const { loggedUser, onlineUsers } = useSelector((store) => store.currentUser);
+  const { socket } = useSelector((store) => store.sockets);
+
+  const setCreateActiveConversation = async () => {
+    try {
+      setMessagesStatus(true);
+      const { data } = await axios.post("/messages/new_conversation", {
+        receiver_id: friend._id,
+      });
+      console.log(data);
+      dispatch(reduxSetActiveConversation(data));
+      setMessagesStatus(false);
+    } catch (error) {
+      setMessagesStatus(false);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <div className="my_friends">
-      <div className="friend">
+      <div className="friend" onClick={setCreateActiveConversation}>
         <div className="friend-picture">
           <img src={friend.picture} alt="" />
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 import FriendsList from "./FriendsList";
 import { useSelector } from "react-redux";
 
-const FriendsBar = ({ setOpenAddFriendBox }) => {
+const FriendsBar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const { myFriends } = useSelector((store) => store.friends);
   return (
     <div className="friendsBar_main">
@@ -16,7 +16,11 @@ const FriendsBar = ({ setOpenAddFriendBox }) => {
         <h2>Private Messages</h2>
         {myFriends.length > 0 &&
           myFriends.map((friend) => (
-            <FriendsList key={friend._id} friend={friend} />
+            <FriendsList
+              key={friend._id}
+              friend={friend}
+              setMessagesStatus={setMessagesStatus}
+            />
           ))}
       </div>
     </div>

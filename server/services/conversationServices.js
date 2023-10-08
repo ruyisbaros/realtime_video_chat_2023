@@ -1,22 +1,13 @@
-const ConversationModel = require("../models/conversationModel.js");
+const ConversationModel = require("../models/conversationModel");
 
 exports.isConversationExist = async (sId, rId) => {
-  let conversation = await ConversationModel.find({
+  let conversation = await ConversationModel.findOne({
     isGroup: false,
     $and: [
       { users: { $elemMatch: { $eq: sId } } },
       { users: { $elemMatch: { $eq: rId } } },
     ],
-  })
-    .populate("users", "-password")
-    .populate({
-      path: "latestMessage",
-      model: "Message",
-      populate: {
-        path: "latestMessage.sender",
-        model: "User",
-      },
-    });
+  }).populate("users", "-password");
 
-  return conversation[0];
+  return conversation;
 };

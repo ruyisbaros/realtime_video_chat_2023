@@ -8,6 +8,7 @@ const initialState = {
   isTyping: false,
   typeTo: null,
   files: [],
+  chatType: "",
 };
 
 const chatSlicer = createSlice({

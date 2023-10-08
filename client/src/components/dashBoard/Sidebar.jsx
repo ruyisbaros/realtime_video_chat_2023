@@ -3,7 +3,7 @@ import InvitationsBar from "./InvitationsBar";
 import FriendsBar from "./FriendsBar";
 import { IoIosPeople } from "react-icons/io";
 
-const Sidebar = ({ setOpenAddFriendBox }) => {
+const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   return (
     <div className="sidebar-main">
       <div className="sidebar-left">
@@ -13,7 +13,10 @@ const Sidebar = ({ setOpenAddFriendBox }) => {
       </div>
       <div className="sidebar-right">
         <div className="sidebar-right_top">
-          <FriendsBar setOpenAddFriendBox={setOpenAddFriendBox} />
+          <FriendsBar
+            setOpenAddFriendBox={setOpenAddFriendBox}
+            setMessagesStatus={setMessagesStatus}
+          />
         </div>
         <div className="sidebar-right_bottom">
           <InvitationsBar />
