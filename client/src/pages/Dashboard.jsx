@@ -44,8 +44,10 @@ const Dashboard = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    fetchMyFriendsAndInvitations();
-  }, [fetchMyFriendsAndInvitations]);
+    if (loggedUser) {
+      fetchMyFriendsAndInvitations();
+    }
+  }, [fetchMyFriendsAndInvitations, loggedUser]);
 
   const handleSendInvitation = async () => {
     try {

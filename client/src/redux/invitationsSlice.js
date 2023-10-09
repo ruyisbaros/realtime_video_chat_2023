@@ -16,7 +16,7 @@ const makeInvitesSlice = createSlice({
       state.myInvitations.push(action.payload);
     },
     reduxRemoveMyInvitations: (state, action) => {
-      state.myInvitations = state.myInvitations.filter(
+      state.myInvitations = state.myInvitations?.filter(
         (usr) => usr.id !== action.payload
       );
     },

@@ -23,13 +23,19 @@ const ActiveChat = ({ messagesStatus }) => {
 
   const fetchRelevantMessages = useCallback(async () => {
     try {
-      const { data } = axios.get();
+      const { data } = await axios.get(
+        `/messages/get_messages/${activeConversation?._id}`
+      );
       console.log(data);
       dispatch(reduxGetMyMessages(data));
     } catch (error) {
       toast.error(error.response.data.message);
     }
-  }, [dispatch]);
+  }, [dispatch, activeConversation]);
+
+  useEffect(() => {
+    fetchRelevantMessages();
+  }, [fetchRelevantMessages]);
 
   return (
     <div className="active_chat_main">

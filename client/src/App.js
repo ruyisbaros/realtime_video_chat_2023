@@ -43,7 +43,9 @@ const App = () => {
     }
   }, [dispatch]);
   useEffect(() => {
-    reFreshToken();
+    if (loggedUser) {
+      reFreshToken();
+    }
   }, [reFreshToken]);
   return (
     <div>

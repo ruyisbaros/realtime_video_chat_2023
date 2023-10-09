@@ -25,13 +25,13 @@ const currentUSlicer = createSlice({
     },
     reduxSetOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
-      state.onlineUsers = state.onlineUsers.filter(
+      state.onlineUsers = state.onlineUsers?.filter(
         (usr) => usr.id !== state.loggedUser.id
       );
       // console.log(state.onLineUsers);
     },
     reduxAUserBecameOffline: (state, action) => {
-      state.onlineUsers = state.onlineUsers.filter(
+      state.onlineUsers = state.onlineUsers?.filter(
         (usr) => usr.id !== action.payload
       );
     },

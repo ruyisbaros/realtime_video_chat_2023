@@ -2,8 +2,7 @@ import { io } from "socket.io-client";
 import { store } from "./redux/store";
 import { BACKEND_URL } from "./axios";
 import {
-  reduxAddMyConversations,
-  reduxAddMyMessagesFromSocket,
+  reduxAddMyMessages,
   reduxStartTyping,
   reduxStopTyping,
 } from "./redux/chatSlice";
@@ -55,17 +54,14 @@ export const connectToSocketServer = () => {
   });
   //Users messages listen
   socket.on("new message", (msg) => {
-    store.dispatch(reduxAddMyMessagesFromSocket(msg));
-  });
-  socket.on("update conversationList", (convo) => {
-    store.dispatch(reduxAddMyConversations(convo));
+    store.dispatch(reduxAddMyMessages(msg));
   });
 
-  socket.on("openTypingToClient", ({ typeTo, convo }) => {
-    store.dispatch(reduxStartTyping({ situation: true, id: typeTo, convo }));
+  socket.on("openTypingToClient", (convo) => {
+    store.dispatch(reduxStartTyping({ situation: true, convo }));
   });
-  socket.on("closeTypingToClient", ({ convo, message }) => {
-    store.dispatch(reduxStopTyping({ situation: false, convo, message }));
+  socket.on("closeTypingToClient", (convo) => {
+    store.dispatch(reduxStopTyping({ situation: false, convo }));
   });
 };
 
@@ -87,22 +83,14 @@ export const rejectInvite = (email) => {
   socket.emit("reject invite", email);
 };
 
-export const joinAConversation = (convo) => {
-  socket?.emit("Join conversation", convo);
-};
-
 export const sendNewMessage = (msg, id) => {
   socket?.emit("new message", { msg, id });
 };
-//first time chat means other user's conversation list should include me real time
-export const createNewConversation = (newConversation, id) => {
-  socket?.emit("update conversationList", { newConversation, id });
+
+export const userStartMessageTyping = (chattedId, activeConversation) => {
+  socket?.emit("typing", { chattedId, activeConversation });
 };
 
-export const userStartMessageTyping = (chattedUserId, typeTo, convo) => {
-  socket?.emit("typing", { chattedUserId, typeTo, convo });
-};
-
-export const userStopMessageTyping = (chattedUserId, convo, message) => {
-  socket?.emit("stop typing", { chattedUserId, convo, message });
+export const userStopMessageTyping = (chattedId, activeConversation) => {
+  socket?.emit("stop typing", { chattedId, activeConversation });
 };

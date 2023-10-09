@@ -16,7 +16,7 @@ const makeFriendSlice = createSlice({
       state.myFriends.push(action.payload);
     },
     reduxRemoveMyFriend: (state, action) => {
-      state.myFriends = state.myFriends.filter(
+      state.myFriends = state.myFriends?.filter(
         (usr) => usr.id !== action.payload
       );
     },

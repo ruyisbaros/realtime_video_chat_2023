@@ -61,4 +61,32 @@ exports.socketServer = (socket, io) => {
       socket.to(`${user.socketId}`).emit("invitation accepted", accepter);
     }
   });
+
+  socket.on("new message", ({ msg, id }) => {
+    const user = users.find((u) => String(u.id) === String(id));
+    console.log(user);
+    if (user) {
+      //console.log(user);
+      socket.to(`${user.socketId}`).emit("new message", msg);
+    }
+  });
+
+  socket.on("typing", ({ chattedId, activeConversation }) => {
+    const user = users.find((u) => String(u.id) === String(chattedId));
+    if (user) {
+      //console.log(user);
+      socket
+        .to(`${user.socketId}`)
+        .emit("openTypingToClient", activeConversation);
+    }
+  });
+  socket.on("stop typing", ({ chattedId, activeConversation }) => {
+    const user = users.find((u) => String(u.id) === String(chattedId));
+    if (user) {
+      //console.log(user);
+      socket
+        .to(`${user.socketId}`)
+        .emit("closeTypingToClient", activeConversation);
+    }
+  });
 };

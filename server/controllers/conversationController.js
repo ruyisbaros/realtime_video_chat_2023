@@ -7,12 +7,14 @@ const conversationCtrl = {
     try {
       const sender_id = req.user._id;
       const { receiver_id } = req.body;
-
+      console.log(receiver_id);
       if (!receiver_id) {
+        console.log("here 1");
         return res.status(500).json({ message: `Something went wrong!` });
       }
       const withChatUser = await User.findById(receiver_id);
       if (!withChatUser) {
+        console.log("here 2");
         return res.status(500).json({ message: `Something went wrong!` });
       }
       //1.) Check if we have a conversation yet

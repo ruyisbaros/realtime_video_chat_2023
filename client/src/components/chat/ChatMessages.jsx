@@ -6,7 +6,7 @@ import SingleMessage from "./SingleMessage";
 
 const ChatMessages = () => {
   const endRef = useRef();
-  const { messages, chattedUser, isTyping, typeTo } = useSelector(
+  const { messages, chattedUser, isTyping } = useSelector(
     (store) => store.messages
   );
   const { loggedUser } = useSelector((store) => store.currentUser);
@@ -16,15 +16,16 @@ const ChatMessages = () => {
   return (
     <div className="scrollBar chat-messages-main">
       <header className="chat-messages-header"></header>
-      {DUMMY_MESSAGES.map((msg) => (
-        <SingleMessage
-          key={msg._id}
-          msg={msg}
-          me={loggedUser.id === msg.sender?._id}
-        />
-      ))}
-      {isTyping && typeTo === chattedUser._id ? <Typing /> : ""}
-      <div ref={endRef} className="h-[40px]"></div>
+      {messages.length > 0 &&
+        messages.map((msg) => (
+          <SingleMessage
+            key={msg._id}
+            msg={msg}
+            me={loggedUser.id === msg.sender?._id.toString()}
+          />
+        ))}
+      {isTyping ? <Typing /> : ""}
+      <div ref={endRef} style={{ height: "40px" }}></div>
     </div>
   );
 };

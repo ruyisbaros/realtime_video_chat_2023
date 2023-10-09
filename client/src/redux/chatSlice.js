@@ -6,7 +6,6 @@ const initialState = {
   activeConversation: null,
   chattedUser: null,
   isTyping: false,
-  typeTo: null,
   files: [],
   chatType: "",
 };
@@ -44,81 +43,21 @@ const chatSlicer = createSlice({
       console.log(action.payload);
       state.messages.push(action.payload);
       //Update latest message
-      state.conversations = state.conversations.map((c) =>
-        c._id === action.payload.conversation._id
-          ? {
-              ...c,
-              latestMessage: { ...action.payload.conversation.latestMessage },
-            }
-          : c
-      );
     },
-    reduxAddMyMessagesFromSocket: (state, action) => {
-      state.messages.push(action.payload);
-      //Update latest message
-      state.conversations = state.conversations.map((c) =>
-        c._id === action.payload.conversation._id
-          ? {
-              ...c,
-              latestMessage: {
-                ...c.latestMessage,
-                message: action.payload.message,
-                files: action.payload.files,
-              },
-            }
-          : c
-      );
-    },
+
     reduxRemoveFromMyMessages: (state, action) => {
       state.messages.pop(action.payload);
     },
-    reduxMakeMessagesSeen: (state, action) => {
-      const { logId, convoId } = action.payload;
-      state.messages = state.messages.map((msg) =>
-        msg.sender._id !== logId &&
-        !msg.seen &&
-        msg.conversation._id === convoId
-          ? { ...msg, seen: true }
-          : msg
-      );
-    },
+
     reduxStartTyping: (state, action) => {
       //console.log(action.payload);
-      state.isTyping = action.payload.situation;
-      state.typeTo = action.payload.id;
-      state.conversations = state.conversations.map((c) =>
-        c._id === action.payload.convo._id
-          ? {
-              ...c,
-              latestMessage: {
-                ...c.latestMessage,
-                message: "Typing...",
-                files: [],
-              },
-            }
-          : c
-      );
+      if (action.payload.convo === state.activeConversation?._id) {
+        state.isTyping = action.payload.situation;
+      }
     },
     reduxStopTyping: (state, action) => {
-      state.isTyping = action.payload.situation;
-      //console.log(action.payload.convo._id);
-      //Re Update latest message after stop typing
-      if (action.payload.convo) {
-        state.conversations = state.conversations.map((c) =>
-          c._id === action.payload.convo._id
-            ? { ...c, latestMessage: action.payload.convo.latestMessage }
-            : c
-        );
-      } else if (action.payload.message) {
-        state.conversations = state.conversations.map((c) =>
-          c._id === action.payload.message.conversation._id
-            ? {
-                ...c,
-                latestMessage:
-                  action.payload.message.conversation.latestMessage,
-              }
-            : c
-        );
+      if (action.payload.convo === state.activeConversation?._id) {
+        state.isTyping = action.payload.situation;
       }
     },
     reduxAddFile: (state, action) => {
@@ -145,8 +84,6 @@ export const {
   reduxGetMyMessages,
   reduxAddMyMessages,
   reduxRemoveFromMyMessages,
-  reduxMakeMessagesSeen,
-  reduxAddMyMessagesFromSocket,
   reduxSetChattedUser,
   reduxStartTyping,
   reduxStopTyping,
