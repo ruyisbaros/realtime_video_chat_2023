@@ -87,3 +87,4 @@ button:disabled {
 @import url("./styles/loginForm.css");
 @import url("./styles/registerForm.css");
 @import url("./styles/messenger.css");
+@import url("./styles/activeChat.css");
