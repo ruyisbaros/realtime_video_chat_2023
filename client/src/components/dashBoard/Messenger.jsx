@@ -8,11 +8,12 @@ import { reduxLogout } from "../../redux/currentUserSlice";
 import { logoutDisconnect } from "../../SocketIOConnection";
 import DiscordInitial from "../chat/DiscordInitial";
 import ActiveChat from "./../chat/ActiveChat";
+import { dateHandler2 } from "../../utils/momentHandler";
 
 const Messenger = ({ messagesStatus }) => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  const { loggedUser, onlineUsers } = useSelector((store) => store.currentUser);
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
@@ -28,7 +29,7 @@ const Messenger = ({ messagesStatus }) => {
   return (
     <div className="messenger-main">
       {
-        <header>
+        <header className="messenger-header">
           <div className="dialog_img">
             <img src={loggedUser?.picture} alt="" className="profile-photo" />
 
@@ -40,7 +41,14 @@ const Messenger = ({ messagesStatus }) => {
                   alt=""
                   className="profile-photo"
                 />
-                <span className="dialog_with_name">{chattedUser?.name}</span>
+                <div className="dialog-info">
+                  <span className="dialog_with_name">{chattedUser?.name}</span>
+                  <span className="dialog_with_status">
+                    {onlineUsers.find((usr) => usr.id === chattedUser?._id)
+                      ? "online"
+                      : "Last online " + dateHandler2(chattedUser?.lastSeen)}
+                  </span>
+                </div>
               </div>
             )}
           </div>

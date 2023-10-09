@@ -2,9 +2,9 @@
   flex: 3;
   background: #36393f;
 }
-.messenger-main header {
+.messenger-header {
   position: relative;
-  height: 55px;
+  height: 60px;
   border-bottom: 1px solid black;
   background: inherit;
   display: flex;
@@ -21,6 +21,14 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+.dialog-info {
+  display: flex;
+  flex-direction: column;
+}
+.dialog_with_status {
+  color: #ddd;
+  font-size: 12px;
 }
 .profile-photo {
   width: 40px;

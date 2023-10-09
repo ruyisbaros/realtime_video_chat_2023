@@ -18,6 +18,14 @@ const messageSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "Conversation",
     },
+    sameSender: {
+      type: Boolean,
+      default: false,
+    },
+    sameDay: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true, collection: "messages" }
 );
