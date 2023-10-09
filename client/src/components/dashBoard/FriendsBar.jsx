@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 const FriendsBar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const { myFriends } = useSelector((store) => store.friends);
+  //console.log(myFriends);
   return (
     <div className="friendsBar_main">
       <button
