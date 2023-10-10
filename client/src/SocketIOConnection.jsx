@@ -15,6 +15,7 @@ import {
 import { createSocket } from "./redux/socketSlicer";
 import { reduxAddMyInvitations } from "./redux/invitationsSlice";
 import { reduxAddMyFriends } from "./redux/FriendsSlice";
+import { reduxRoomDetails, reduxSetActiveRooms } from "./redux/videoSlice";
 let socket;
 
 export const connectWithSocketServer = () => {
@@ -41,7 +42,7 @@ export const connectToSocketServer = () => {
     onUsers = JSON.parse(onUsers);
     onUsers = onUsers?.filter((usr) => usr.id !== id);
     window.localStorage.setItem("onlineUsersDiscord", JSON.stringify(onUsers));
-    window.localStorage.removeItem("mySocketDiscord");
+    //window.localStorage.removeItem("mySocketDiscord");
     store.dispatch(reduxAUserBecameOffline(id));
   });
 
@@ -62,6 +63,18 @@ export const connectToSocketServer = () => {
   });
   socket.on("closeTypingToClient", (convo) => {
     store.dispatch(reduxStopTyping({ situation: false, convo }));
+  });
+
+  //Rooms Videos actions listen
+  socket.on("created new room", (room) => {
+    //console.log(room);
+    store.dispatch(reduxRoomDetails(room));
+  });
+
+  socket.on("get active rooms", (rooms) => {
+    console.log(rooms);
+    window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
+    store.dispatch(reduxSetActiveRooms(rooms));
   });
 };
 
@@ -93,4 +106,11 @@ export const userStartMessageTyping = (chattedId, activeConversation) => {
 
 export const userStopMessageTyping = (chattedId, activeConversation) => {
   socket?.emit("stop typing", { chattedId, activeConversation });
+};
+
+export const openCreateNewRoom = (user) => {
+  socket.emit("create room", user);
+};
+export const emitActiveRooms = (userId) => {
+  socket.emit("emit active rooms", userId);
 };

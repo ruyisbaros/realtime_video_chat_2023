@@ -5,7 +5,11 @@ import {
   MdScreenShare,
   MdStopScreenShare,
 } from "react-icons/md";
-import { AiOutlineAudio, AiOutlineAudioMuted } from "react-icons/ai";
+import {
+  AiOutlineAudio,
+  AiOutlineAudioMuted,
+  AiOutlineClose,
+} from "react-icons/ai";
 import { BsCameraVideo, BsCameraVideoOff } from "react-icons/bs";
 
 const CallActions = ({ setIsFullScreen, isFullScreen }) => {
@@ -51,6 +55,14 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
               ) : (
                 <BsCameraVideo size={20} />
               )}
+            </button>
+          </li>
+          <li>
+            <button
+              className="resize-btn"
+              onClick={() => setCameraOpen((prev) => !prev)}
+            >
+              <AiOutlineClose size={20} />
             </button>
           </li>
           <li>

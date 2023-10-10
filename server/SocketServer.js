@@ -1,5 +1,7 @@
 const User = require("./models/userModel");
+const { v4: uuidv4 } = require("uuid");
 let users = [];
+let activeRooms = [];
 exports.socketServer = (socket, io) => {
   console.log(`User with ${socket.id} connected`);
   //User status listen
@@ -55,16 +57,16 @@ exports.socketServer = (socket, io) => {
   });
   socket.on("invitation accepted", ({ id, accepter }) => {
     const user = users.find((u) => String(u.id) === String(id));
-    console.log(user);
+    //console.log(user);
     if (user) {
       //console.log(user);
       socket.to(`${user.socketId}`).emit("invitation accepted", accepter);
     }
   });
-
+  //Users chat actions listen
   socket.on("new message", ({ msg, id }) => {
     const user = users.find((u) => String(u.id) === String(id));
-    console.log(user);
+    //console.log(user);
     if (user) {
       //console.log(user);
       socket.to(`${user.socketId}`).emit("new message", msg);
@@ -87,6 +89,40 @@ exports.socketServer = (socket, io) => {
       socket
         .to(`${user.socketId}`)
         .emit("closeTypingToClient", activeConversation);
+    }
+  });
+
+  //Calls Videos actions listen
+  socket.on("create room", (user) => {
+    const usr = activeRooms.find((rm) => rm.roomCreator.userId === user.id);
+    console.log(usr);
+    if (!usr) {
+      const newActiveRoom = {
+        roomCreator: {
+          userId: user.id,
+          name: user.name,
+          picture: user.picture,
+          socketId: socket.id,
+        },
+        participants: [
+          {
+            userId: user.id,
+            socketId: socket.id,
+          },
+        ],
+        roomId: uuidv4(),
+      };
+      activeRooms.push(newActiveRoom);
+      io.emit("created new room", newActiveRoom);
+    }
+  });
+
+  socket.on("emit active rooms", (id) => {
+    if (id) {
+      const user = users.find((u) => String(u.id) === String(id));
+      socket.to(`${user.socketId}`).emit("emit active rooms", activeRooms);
+    } else {
+      io.emit("get active rooms", activeRooms);
     }
   });
 };

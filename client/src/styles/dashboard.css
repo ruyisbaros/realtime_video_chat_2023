@@ -35,6 +35,19 @@
   border-bottom: 1px solid black;
   overflow-y: auto;
 }
+
+.my-rooms-btn {
+  margin: 1rem 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.my-rooms-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 /* FriendsBar */
 
 .friendsBar-container h2,

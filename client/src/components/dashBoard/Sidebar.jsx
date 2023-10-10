@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import InvitationsBar from "./InvitationsBar";
 import FriendsBar from "./FriendsBar";
 import { IoIosPeople } from "react-icons/io";
 import { MdCreateNewFolder } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reduxOpenRoom } from "../../redux/videoSlice";
+import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();
+  const { loggedUser } = useSelector((store) => store.currentUser);
+  const { activeRooms, isUserInRoom } = useSelector((store) => store.videos);
+  const { myFriends } = useSelector((store) => store.friends);
+  const [rooms, setRooms] = useState([]);
+
   const createNewRoom = async () => {
     dispatch(reduxOpenRoom({ isInRoom: true, isCreator: true }));
+    openCreateNewRoom(loggedUser);
+    emitActiveRooms(); //This id will be set
   };
+
+  useEffect(() => {
+    const item = myFriends.map((fr) =>
+      activeRooms.filter((rm) => rm.roomCreator.userId === fr._id)
+    );
+    if (item) {
+      setRooms(...item);
+    }
+  }, [activeRooms, myFriends]);
+  console.log(rooms);
   return (
     <div className="sidebar-main">
       <div className="sidebar-left">
@@ -20,6 +38,16 @@ const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
         <button className="create-room-icon-btn" onClick={createNewRoom}>
           <MdCreateNewFolder size={20} />
         </button>
+        {rooms.length > 0 &&
+          rooms.map((rm) => (
+            <button key={rm.roomId} className="my-rooms-btn">
+              <img
+                src={rm.roomCreator.picture}
+                alt=""
+                className="my-rooms-img"
+              />
+            </button>
+          ))}
       </div>
       <div className="sidebar-right">
         <div className="sidebar-right_top">

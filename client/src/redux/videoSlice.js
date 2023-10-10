@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-//let friends = window.localStorage.getItem("friendsDiscord");
+let rooms = window.localStorage.getItem("activeRoomsDiscord");
 const initialState = {
   isUserInRoom: false,
   isUserRoomCreator: false,
-  activeRooms: [],
+  activeRooms: rooms ? JSON.parse(rooms) : [],
   roomDetails: null,
   localStream: null,
   remoteStreams: [],
@@ -17,15 +17,20 @@ const makeVideoSlice = createSlice({
   name: "videos",
   initialState,
   reducers: {
-    reduxFetchRooms: (state, action) => {
-      state.activeRooms = action.payload;
-    },
     reduxOpenRoom: (state, action) => {
       state.isUserInRoom = action.payload.isInRoom;
       state.isUserRoomCreator = action.payload.isCreator;
     },
-    reduxRoomDetails: (state, action) => {},
-    reduxSetActiveRooms: (state, action) => {},
+    reduxCloseRoom: (state, action) => {
+      state.isUserInRoom = false;
+      state.isUserRoomCreator = false;
+    },
+    reduxRoomDetails: (state, action) => {
+      state.roomDetails = action.payload;
+    },
+    reduxSetActiveRooms: (state, action) => {
+      state.activeRooms = action.payload;
+    },
     reduxSetLocalStream: (state, action) => {},
     reduxSetRemoteStreams: (state, action) => {},
     reduxSetAudioOnly: (state, action) => {},
@@ -34,7 +39,6 @@ const makeVideoSlice = createSlice({
 });
 
 export const {
-  reduxFetchRooms,
   reduxOpenRoom,
   reduxRoomDetails,
   reduxSetActiveRooms,

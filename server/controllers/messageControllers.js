@@ -17,7 +17,7 @@ const messageCtrl = {
       const returnedMessage = await Message.findOne({ _id: newMessage._id })
         .populate("sender", "-password")
         .populate("recipient", "-password");
-      console.log("Returning Message:::: ", returnedMessage);
+      // console.log("Returning Message:::: ", returnedMessage);
       res.status(201).json(returnedMessage);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -30,7 +30,7 @@ const messageCtrl = {
       const messages = await Message.find({ conversation })
         .populate("sender", "-password")
         .populate("recipient", "-password");
-      console.log("messages: ", messages);
+      //console.log("messages: ", messages);
       res.status(200).json(messages);
     } catch (error) {
       res.status(500).json({ message: error.message });
