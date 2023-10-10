@@ -11,3 +11,13 @@ exports.isConversationExist = async (sId, rId) => {
 
   return conversation;
 };
+
+//Another way with mongo
+exports.isConversationExist2 = async (sId, rId) => {
+  let conversation = await ConversationModel.findOne({
+    isGroup: false,
+    users: { $all: [sId, rId] },
+  }).populate("users", "-password");
+
+  return conversation;
+};

@@ -7,8 +7,8 @@ import { reduxSetActiveConversation } from "../../redux/chatSlice";
 const FriendsList = ({ friend, setMessagesStatus }) => {
   //console.log(friend);
   const dispatch = useDispatch();
-  const { loggedUser, onlineUsers } = useSelector((store) => store.currentUser);
-  const { socket } = useSelector((store) => store.sockets);
+  const { onlineUsers } = useSelector((store) => store.currentUser);
+  //const { socket } = useSelector((store) => store.sockets);
 
   const setCreateActiveConversation = async () => {
     try {

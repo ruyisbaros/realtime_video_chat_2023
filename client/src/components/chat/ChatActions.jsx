@@ -16,7 +16,7 @@ const ChatActions = () => {
   const { activeConversation, chattedUser, isTyping } = useSelector(
     (store) => store.messages
   );
-  const { loggedUser } = useSelector((store) => store.currentUser);
+  //const { loggedUser } = useSelector((store) => store.currentUser);
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
 
