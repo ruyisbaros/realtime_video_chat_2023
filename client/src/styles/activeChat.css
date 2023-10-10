@@ -51,6 +51,9 @@
   border-radius: 10px;
   padding: 5px 10px;
 }
+.if-me {
+  background: #2d3e55;
+}
 .message-owner {
   margin-bottom: 5px;
   color: #3e7b96;

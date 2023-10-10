@@ -7,19 +7,17 @@ const SingleMessage = ({ msg, me }) => {
       <div
         className={`single-message-content ${me ? "single-message-mine" : ""}`}
       >
-        {!msg.sameSender && !msg.sameDay && !me ? (
+        {/* {!msg.sameSender && !msg.sameDay && !me ? (
           <img src={msg.sender.picture} alt="" className="single-message-img" />
         ) : (
           <div className="single-message-img"></div>
-        )}
-        <div className="single-message-box">
-          {!me && <div className="message-owner">{msg.sender.name}</div>}
+        )} */}
+        <div className={`single-message-box ${me ? "if-me" : ""}`}>
+          {/* {!me && <div className="message-owner">{msg.sender.name}</div>} */}
           <div className="message-content">
             <p className="message-text"> {msg.message}</p>
             {!msg.sameDay ? (
-              <span className="message-date">
-                {dateHandler(msg.createdAt)} ago
-              </span>
+              <span className="message-date">{dateHandler(msg.createdAt)}</span>
             ) : (
               <span className="message-date"></span>
             )}

@@ -17,7 +17,9 @@ const ChatMessages = () => {
     <div className="scrollBar chat-messages-main">
       <header className="chat-messages-header"></header>
       {messages.length > 0 &&
-        messages.map((msg) => (
+        messages.map((msg, i) => (
+          /* sameSender= i>0&&messages[i].sender._id===messages[i-1].sender._id*/
+          /* sameDay= i>convertDate*/
           <SingleMessage
             key={msg._id}
             msg={msg}
