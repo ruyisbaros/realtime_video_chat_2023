@@ -10,6 +10,7 @@ import { reduxLogout } from "../redux/currentUserSlice";
 import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
 import { inviteFriend } from "../SocketIOConnection";
+import Room from "../components/videos/Room";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const [status, setStatus] = useState(false);
   const [messagesStatus, setMessagesStatus] = useState(false);
   const { loggedUser } = useSelector((store) => store.currentUser);
+  const { isUserInRoom } = useSelector((store) => store.videos);
 
   const fetchMyFriendsAndInvitations = useCallback(async () => {
     try {
@@ -79,6 +81,7 @@ const Dashboard = () => {
           setMessagesStatus={setMessagesStatus}
         />
         <Messenger messagesStatus={messagesStatus} />
+        {isUserInRoom && <Room />}
       </div>
       {openAddFriendBox && (
         <div className="invite_friend_box">

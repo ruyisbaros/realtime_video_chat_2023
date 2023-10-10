@@ -215,6 +215,14 @@
   color: #fff;
   background: #5865f2;
 }
+.create-room-icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  margin-top: 10px;
+  color: #fff;
+  background: #5865f2;
+}
 .add-friend-btn {
   width: 80%;
   height: 30px;
