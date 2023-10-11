@@ -114,3 +114,7 @@ export const openCreateNewRoom = (user) => {
 export const emitActiveRooms = (userId) => {
   socket.emit("emit active rooms", userId);
 };
+
+export const joinActiveRoom = (userId) => {
+  socket.emit("join active room", userId);
+};

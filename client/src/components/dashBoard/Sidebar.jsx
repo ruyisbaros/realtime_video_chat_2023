@@ -6,6 +6,7 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxOpenRoom } from "../../redux/videoSlice";
 import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
+import ActiveRoomBtn from "../videos/ActiveRoomBtn";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();
@@ -39,15 +40,7 @@ const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
           <MdCreateNewFolder size={20} />
         </button>
         {rooms.length > 0 &&
-          rooms.map((rm) => (
-            <button key={rm.roomId} className="my-rooms-btn">
-              <img
-                src={rm.roomCreator.picture}
-                alt=""
-                className="my-rooms-img"
-              />
-            </button>
-          ))}
+          rooms.map((rm) => <ActiveRoomBtn key={rm.roomId} room={rm} />)}
       </div>
       <div className="sidebar-right">
         <div className="sidebar-right_top">

@@ -95,7 +95,7 @@ exports.socketServer = (socket, io) => {
   //Calls Videos actions listen
   socket.on("create room", (user) => {
     const usr = activeRooms.find((rm) => rm.roomCreator.userId === user.id);
-    console.log(usr);
+    //console.log(usr);
     if (!usr) {
       const newActiveRoom = {
         roomCreator: {
@@ -123,6 +123,15 @@ exports.socketServer = (socket, io) => {
       socket.to(`${user.socketId}`).emit("emit active rooms", activeRooms);
     } else {
       io.emit("get active rooms", activeRooms);
+    }
+  });
+
+  socket.on("join active room", (userId) => {
+    const user = activeRooms.find((rm) =>
+      rm.participants.find((prt) => prt.userId === userId)
+    );
+    if (!user) {
+      activeRooms;
     }
   });
 };
