@@ -4,32 +4,34 @@ import FriendsBar from "./FriendsBar";
 import { IoIosPeople } from "react-icons/io";
 import { MdCreateNewFolder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxOpenRoom } from "../../redux/videoSlice";
 import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
 import ActiveRoomBtn from "../videos/ActiveRoomBtn";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeRooms, isUserInRoom } = useSelector((store) => store.videos);
+  const { activeRooms } = useSelector((store) => store.videos);
   const { myFriends } = useSelector((store) => store.friends);
   const [rooms, setRooms] = useState([]);
 
   const createNewRoom = async () => {
-    dispatch(reduxOpenRoom({ isInRoom: true, isCreator: true }));
     openCreateNewRoom(loggedUser);
     emitActiveRooms(); //This id will be set
   };
 
   useEffect(() => {
-    const item = myFriends.map((fr) =>
-      activeRooms.filter((rm) =>
-        rm.participants.find((prt) => prt.userId === fr._id)
-      )
-    );
-    //console.log(item);
-    if (item) {
-      setRooms(...item);
+    if (activeRooms.length > 0) {
+      const item = myFriends.map((fr) =>
+        activeRooms.filter((rm) =>
+          rm.participants.find((prt) => prt.userId === fr._id)
+        )
+      );
+      //console.log(item);
+      if (item) {
+        setRooms(...item);
+      }
+    } else {
+      setRooms([]);
     }
   }, [activeRooms, myFriends]);
   console.log(rooms);

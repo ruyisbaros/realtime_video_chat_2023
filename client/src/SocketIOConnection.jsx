@@ -68,6 +68,7 @@ export const connectToSocketServer = () => {
   //Rooms Videos actions listen
   socket.on("created new room", (room) => {
     //console.log(room);
+    window.localStorage.setItem("roomDetailsDiscord", JSON.stringify(room));
     store.dispatch(reduxRoomDetails(room));
   });
 
@@ -77,6 +78,16 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxSetActiveRooms(rooms));
   });
   socket.on("updated rooms", (rooms) => {
+    console.log(rooms);
+    window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
+    store.dispatch(reduxSetActiveRooms(rooms));
+  });
+  socket.on("leave from room", (rooms) => {
+    console.log(rooms);
+    window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
+    store.dispatch(reduxSetActiveRooms(rooms));
+  });
+  socket.on("close the room", (rooms) => {
     console.log(rooms);
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
@@ -122,4 +133,11 @@ export const emitActiveRooms = (userId) => {
 
 export const joinActiveRoom = (userId, roomId) => {
   socket.emit("join active room", { userId, roomId });
+};
+
+export const leaveFromRoom = (userId, roomId) => {
+  socket.emit("leave from room", { userId, roomId });
+};
+export const closeTheRoom = (roomId) => {
+  socket.emit("close the room", roomId);
 };

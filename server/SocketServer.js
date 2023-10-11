@@ -138,4 +138,23 @@ exports.socketServer = (socket, io) => {
       io.emit("updated rooms", activeRooms);
     }
   });
+  socket.on("leave from room", ({ userId, roomId }) => {
+    let room = activeRooms.find((rm) => rm.roomId === roomId);
+    room.participants = room.participants.filter(
+      (prt) => prt.userId !== userId
+    );
+
+    activeRooms = activeRooms.map((rm) => {
+      if (rm.roomId === roomId) {
+        return room;
+      } else {
+        return rm;
+      }
+    });
+    io.emit("leave from room", activeRooms);
+  });
+  socket.on("close the room", (roomId) => {
+    activeRooms = activeRooms.filter((rm) => rm.roomId !== roomId);
+    io.emit("close the room", activeRooms);
+  });
 };

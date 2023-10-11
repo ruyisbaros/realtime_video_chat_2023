@@ -19,7 +19,19 @@ const Dashboard = () => {
   const [status, setStatus] = useState(false);
   const [messagesStatus, setMessagesStatus] = useState(false);
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { isUserInRoom } = useSelector((store) => store.videos);
+  const { activeRooms } = useSelector((store) => store.videos);
+  const [isInRoom, setIsInRoom] = useState(false);
+
+  useEffect(() => {
+    const user = activeRooms.find((rm) =>
+      rm.participants.find((prt) => prt.userId === loggedUser.id)
+    );
+    if (user) {
+      setIsInRoom(true);
+    } else {
+      setIsInRoom(false);
+    }
+  }, [activeRooms, loggedUser]);
 
   const fetchMyFriendsAndInvitations = useCallback(async () => {
     try {
@@ -81,7 +93,7 @@ const Dashboard = () => {
           setMessagesStatus={setMessagesStatus}
         />
         <Messenger messagesStatus={messagesStatus} />
-        {isUserInRoom && <Room />}
+        {isInRoom && <Room />}
       </div>
       {openAddFriendBox && (
         <div className="invite_friend_box">

@@ -58,3 +58,24 @@
 .resize-btn:hover {
   color: #000;
 }
+@media (max-height: 610px) {
+  .room-min-screen {
+    height: 50vh;
+  }
+  .video-container-main {
+    height: 80%;
+  }
+
+  .call-actions-main {
+    height: 20%;
+  }
+}
+@media (max-width: 1200px) {
+  .room-min-screen {
+    width: 40%;
+  }
+  .resize-btn {
+    width: 35px;
+    height: 35px;
+  }
+}

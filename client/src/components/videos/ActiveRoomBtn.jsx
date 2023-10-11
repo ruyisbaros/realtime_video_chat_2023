@@ -7,6 +7,7 @@ import { reduxOpenRoom } from "../../redux/videoSlice";
 const ActiveRoomBtn = ({ room }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
+  const { activeRooms } = useSelector((store) => store.videos);
   const [isUserInRoom, setIsUserInRoom] = useState(false);
 
   useEffect(() => {
@@ -16,12 +17,11 @@ const ActiveRoomBtn = ({ room }) => {
     } else {
       setIsUserInRoom(false);
     }
-  }, [loggedUser, room]);
+  }, [loggedUser, activeRooms, room.participants]);
   //console.log(isUserInRoom);
 
   const handleJoinActiveRoom = () => {
     if (!isUserInRoom && room.participants.length < 3) {
-      dispatch(reduxOpenRoom({ isInRoom: true, isCreator: false })); //Room details???reduxRoomDetails(room)
       joinActiveRoom(loggedUser.id, room.roomId);
     }
   };

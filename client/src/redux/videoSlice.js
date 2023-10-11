@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 let rooms = window.localStorage.getItem("activeRoomsDiscord");
+let room = window.localStorage.getItem("roomDetailsDiscord");
 const initialState = {
-  isUserInRoom: false,
-  isUserRoomCreator: false,
   activeRooms: rooms ? JSON.parse(rooms) : [],
-  roomDetails: null,
+  roomDetails: room ? JSON.parse(room) : null,
   localStream: null,
   remoteStreams: [],
   audioOnly: false,
@@ -17,19 +16,32 @@ const makeVideoSlice = createSlice({
   name: "videos",
   initialState,
   reducers: {
-    reduxOpenRoom: (state, action) => {
-      state.isUserInRoom = action.payload.isInRoom;
-      state.isUserRoomCreator = action.payload.isCreator;
-    },
-    reduxCloseRoom: (state, action) => {
-      state.isUserInRoom = false;
-      state.isUserRoomCreator = false;
-    },
     reduxRoomDetails: (state, action) => {
       state.roomDetails = action.payload;
     },
     reduxSetActiveRooms: (state, action) => {
       state.activeRooms = action.payload;
+    },
+    reduxLeaveTheRoom: (state, action) => {
+      let room = state.activeRooms.find(
+        (rm) => rm.roomId === action.payload.idR
+      );
+      room.participants = room.participants.filter(
+        (prt) => prt.userId !== action.payload.idU
+      );
+
+      state.activeRooms = state.activeRooms.map((rm) => {
+        if (rm.roomId === action.payload.idR) {
+          return room;
+        } else {
+          return rm;
+        }
+      });
+    },
+    reduxCloseTheRoom: (state, action) => {
+      state.activeRooms = state.activeRooms.filter(
+        (rm) => rm.roomId !== action.payload.idR
+      );
     },
     reduxSetLocalStream: (state, action) => {},
     reduxSetRemoteStreams: (state, action) => {},
@@ -39,13 +51,14 @@ const makeVideoSlice = createSlice({
 });
 
 export const {
-  reduxOpenRoom,
   reduxRoomDetails,
   reduxSetActiveRooms,
   reduxSetAudioOnly,
   reduxSetLocalStream,
   reduxSetRemoteStreams,
   reduxSetScreenShareStream,
+  reduxLeaveTheRoom,
+  reduxCloseTheRoom,
 } = makeVideoSlice.actions;
 
 export default makeVideoSlice.reducer;
