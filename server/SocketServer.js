@@ -126,12 +126,16 @@ exports.socketServer = (socket, io) => {
     }
   });
 
-  socket.on("join active room", (userId) => {
-    const user = activeRooms.find((rm) =>
-      rm.participants.find((prt) => prt.userId === userId)
-    );
+  socket.on("join active room", ({ userId, roomId }) => {
+    const room = activeRooms.find((rm) => rm.roomId === roomId);
+    const user = room.participants.find((prt) => prt.userId === userId);
     if (!user) {
-      activeRooms;
+      activeRooms.forEach((rm) => {
+        if (rm.roomId === roomId) {
+          rm.participants.push({ userId, socketId: socket.id });
+        }
+      });
+      io.emit("updated rooms", activeRooms);
     }
   });
 };

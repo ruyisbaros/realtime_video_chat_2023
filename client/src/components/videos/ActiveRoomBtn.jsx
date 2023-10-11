@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { makeCapitalize } from "../../utils/capitalize";
+import { joinActiveRoom } from "../../SocketIOConnection";
+import { reduxOpenRoom } from "../../redux/videoSlice";
 
 const ActiveRoomBtn = ({ room }) => {
+  const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
   const [isUserInRoom, setIsUserInRoom] = useState(false);
 
@@ -14,10 +17,12 @@ const ActiveRoomBtn = ({ room }) => {
       setIsUserInRoom(false);
     }
   }, [loggedUser, room]);
-  console.log(isUserInRoom);
+  //console.log(isUserInRoom);
 
   const handleJoinActiveRoom = () => {
     if (!isUserInRoom && room.participants.length < 3) {
+      dispatch(reduxOpenRoom({ isInRoom: true, isCreator: false })); //Room details???reduxRoomDetails(room)
+      joinActiveRoom(loggedUser.id, room.roomId);
     }
   };
 

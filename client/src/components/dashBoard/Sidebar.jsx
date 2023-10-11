@@ -23,8 +23,11 @@ const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
 
   useEffect(() => {
     const item = myFriends.map((fr) =>
-      activeRooms.filter((rm) => rm.roomCreator.userId === fr._id)
+      activeRooms.filter((rm) =>
+        rm.participants.find((prt) => prt.userId === fr._id)
+      )
     );
+    //console.log(item);
     if (item) {
       setRooms(...item);
     }

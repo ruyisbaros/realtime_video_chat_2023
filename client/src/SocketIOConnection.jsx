@@ -76,6 +76,11 @@ export const connectToSocketServer = () => {
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
+  socket.on("updated rooms", (rooms) => {
+    console.log(rooms);
+    window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
+    store.dispatch(reduxSetActiveRooms(rooms));
+  });
 };
 
 //Emit user activities
@@ -115,6 +120,6 @@ export const emitActiveRooms = (userId) => {
   socket.emit("emit active rooms", userId);
 };
 
-export const joinActiveRoom = (userId) => {
-  socket.emit("join active room", userId);
+export const joinActiveRoom = (userId, roomId) => {
+  socket.emit("join active room", { userId, roomId });
 };
