@@ -13,12 +13,16 @@ import {
 import { BsCameraVideo, BsCameraVideoOff } from "react-icons/bs";
 import { closeTheRoom, leaveFromRoom } from "../../SocketIOConnection";
 import { useDispatch, useSelector } from "react-redux";
-import { reduxLeaveTheRoom, reduxCloseTheRoom } from "../../redux/videoSlice";
+import {
+  reduxLeaveTheRoom,
+  reduxCloseTheRoom,
+  reduxSetLocalStream,
+} from "../../redux/videoSlice";
 
 const CallActions = ({ setIsFullScreen, isFullScreen }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { roomDetails } = useSelector((store) => store.videos);
+  const { roomDetails, localStream } = useSelector((store) => store.videos);
   const [shareScreen, setShareScreen] = useState(false);
   const [audioMuted, setAudioMuted] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -27,12 +31,20 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
     if (roomDetails.roomCreator.userId === loggedUser.id) {
       closeTheRoom(roomDetails.roomId);
       dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
+      if (localStream !== null) {
+        localStream.getTracks().forEach((track) => track.stop());
+        dispatch(reduxSetLocalStream(null));
+      }
     } else {
       leaveFromRoom(loggedUser.id, roomDetails.roomId);
       //console.log("triggered");
       dispatch(
         reduxLeaveTheRoom({ idR: roomDetails.roomId, idU: loggedUser.id })
       );
+      if (localStream !== null) {
+        localStream.getTracks().forEach((track) => track.stop());
+        dispatch(reduxSetLocalStream(null));
+      }
     }
   };
   return (

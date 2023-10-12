@@ -17,6 +17,7 @@ import {
   reduxCloseTheRoom,
   reduxLeaveTheRoom,
   reduxSetAudioOnly,
+  reduxSetLocalStream,
   reduxUnSetAudioOnly,
 } from "../../redux/videoSlice";
 
@@ -24,7 +25,7 @@ const Messenger = ({ messagesStatus }) => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
   const { loggedUser, onlineUsers } = useSelector((store) => store.currentUser);
-  const { audioOnly } = useSelector((store) => store.videos);
+  const { audioOnly, localStream } = useSelector((store) => store.videos);
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
@@ -39,12 +40,20 @@ const Messenger = ({ messagesStatus }) => {
       if (roomDetails.roomCreator.userId === loggedUser.id) {
         closeTheRoom(roomDetails.roomId);
         dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
+        if (localStream !== null) {
+          localStream.getTracks().forEach((track) => track.stop());
+          dispatch(reduxSetLocalStream(null));
+        }
       } else {
         leaveFromRoom(loggedUser.id, roomDetails.roomId);
         //console.log("triggered");
         dispatch(
           reduxLeaveTheRoom({ idR: roomDetails.roomId, idU: loggedUser.id })
         );
+        if (localStream !== null) {
+          localStream.getTracks().forEach((track) => track.stop());
+          dispatch(reduxSetLocalStream(null));
+        }
       }
     } catch (error) {
       toast.error(error.response.data.message);
