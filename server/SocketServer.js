@@ -105,6 +105,7 @@ exports.socketServer = (socket, io) => {
   });
 
   //Calls Videos actions listen
+  //1.) Rooms events
   socket.on("create room", (user) => {
     const usr = activeRooms.find((rm) => rm.roomCreator.userId === user.id);
     //console.log(usr);
@@ -147,9 +148,10 @@ exports.socketServer = (socket, io) => {
           rm.participants.push({ userId, socketId: socket.id });
         }
       });
-      io.emit("updated rooms", activeRooms);
     }
+    io.emit("updated rooms", activeRooms);
   });
+
   socket.on("leave from room", ({ userId, roomId }) => {
     let room = activeRooms.find((rm) => rm.roomId === roomId);
     room.participants = room.participants.filter(
@@ -165,8 +167,22 @@ exports.socketServer = (socket, io) => {
     });
     io.emit("leave from room", activeRooms);
   });
+
   socket.on("close the room", (roomId) => {
     activeRooms = activeRooms.filter((rm) => rm.roomId !== roomId);
     io.emit("close the room", activeRooms);
+  });
+
+  //2.) Video streams events
+  socket.on("conn-prepare", ({ userId, roomId }) => {
+    const room = activeRooms.find((rm) => rm.roomId === roomId);
+    const user = room.participants.find((prt) => prt.userId === userId);
+    room.participants.length > 0 &&
+      room.participants.forEach((prt) => {
+        if (prt.socketId !== user.socketId) {
+          //to not myself!
+          socket.to(`${prt.socketId}`).emit("conn-prepare", user?.socketId);
+        }
+      });
   });
 };

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
 import ActiveRoomBtn from "../videos/ActiveRoomBtn";
 import { getLocalStreamPreview } from "../videos/WebRTCHandler";
+import Peer from "simple-peer";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();

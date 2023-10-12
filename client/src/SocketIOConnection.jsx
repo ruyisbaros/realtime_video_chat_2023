@@ -92,6 +92,11 @@ export const connectToSocketServer = () => {
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
+
+  //Video signals listen
+  socket.on("conn-prepare", (remoteUserSocket) => {
+    console.log(remoteUserSocket);
+  });
 };
 
 //Emit user activities
@@ -140,4 +145,8 @@ export const leaveFromRoom = (userId, roomId) => {
 };
 export const closeTheRoom = (roomId) => {
   socket.emit("close the room", roomId);
+};
+
+export const prepConnAfterJoin = (userId, roomId) => {
+  socket.emit("conn-prepare", { userId, roomId });
 };

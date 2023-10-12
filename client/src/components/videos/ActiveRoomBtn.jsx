@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeCapitalize } from "../../utils/capitalize";
-import { joinActiveRoom } from "../../SocketIOConnection";
+import { joinActiveRoom, prepConnAfterJoin } from "../../SocketIOConnection";
 import { reduxOpenRoom } from "../../redux/videoSlice";
 import { getLocalStreamPreview } from "./WebRTCHandler";
 
@@ -25,6 +25,7 @@ const ActiveRoomBtn = ({ room }) => {
     if (!isUserInRoom && room.participants.length < 3) {
       const successCallBackFunc = () => {
         joinActiveRoom(loggedUser.id, room.roomId);
+        prepConnAfterJoin(loggedUser.id, room.roomId);
       };
       getLocalStreamPreview(audioOnly, successCallBackFunc);
     }
