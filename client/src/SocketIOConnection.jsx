@@ -73,22 +73,22 @@ export const connectToSocketServer = () => {
   });
 
   socket.on("get active rooms", (rooms) => {
-    console.log(rooms);
+    //console.log(rooms);
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
   socket.on("updated rooms", (rooms) => {
-    console.log(rooms);
+    //console.log(rooms);
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
   socket.on("leave from room", (rooms) => {
-    console.log(rooms);
+    //console.log(rooms);
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
   socket.on("close the room", (rooms) => {
-    console.log(rooms);
+    //console.log(rooms);
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });

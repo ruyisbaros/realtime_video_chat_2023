@@ -5,25 +5,57 @@ import axios from "../../axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { reduxLogout } from "../../redux/currentUserSlice";
-import { logoutDisconnect } from "../../SocketIOConnection";
+import {
+  closeTheRoom,
+  leaveFromRoom,
+  logoutDisconnect,
+} from "../../SocketIOConnection";
 import DiscordInitial from "../chat/DiscordInitial";
 import ActiveChat from "./../chat/ActiveChat";
 import { dateHandler2 } from "../../utils/momentHandler";
+import {
+  reduxCloseTheRoom,
+  reduxLeaveTheRoom,
+  reduxSetAudioOnly,
+  reduxUnSetAudioOnly,
+} from "../../redux/videoSlice";
 
 const Messenger = ({ messagesStatus }) => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
   const { loggedUser, onlineUsers } = useSelector((store) => store.currentUser);
+  const { audioOnly } = useSelector((store) => store.videos);
   const { activeConversation, chattedUser } = useSelector(
     (store) => store.messages
   );
+  const { roomDetails } = useSelector((store) => store.videos);
   const handleLogout = async () => {
     try {
       await axios.get("/auth/logout");
       dispatch(reduxLogout());
       logoutDisconnect(loggedUser.id);
+
+      //Rooms situation socket emits
+      if (roomDetails.roomCreator.userId === loggedUser.id) {
+        closeTheRoom(roomDetails.roomId);
+        dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
+      } else {
+        leaveFromRoom(loggedUser.id, roomDetails.roomId);
+        //console.log("triggered");
+        dispatch(
+          reduxLeaveTheRoom({ idR: roomDetails.roomId, idU: loggedUser.id })
+        );
+      }
     } catch (error) {
       toast.error(error.response.data.message);
+    }
+  };
+
+  const handleAudioOnly = () => {
+    if (audioOnly) {
+      dispatch(reduxUnSetAudioOnly());
+    } else {
+      dispatch(reduxSetAudioOnly());
     }
   };
   return (
@@ -61,6 +93,9 @@ const Messenger = ({ messagesStatus }) => {
           {showDrop && (
             <div className="drop-menu">
               <ul>
+                <li onClick={handleAudioOnly}>
+                  {audioOnly ? "Audio Only Enabled" : "Audio Only Disabled"}
+                </li>
                 <li onClick={handleLogout}>Logout</li>
               </ul>
             </div>

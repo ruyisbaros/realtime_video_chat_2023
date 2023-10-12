@@ -43,9 +43,18 @@ const makeVideoSlice = createSlice({
         (rm) => rm.roomId !== action.payload.idR
       );
     },
-    reduxSetLocalStream: (state, action) => {},
-    reduxSetRemoteStreams: (state, action) => {},
-    reduxSetAudioOnly: (state, action) => {},
+    reduxSetLocalStream: (state, action) => {
+      state.localStream = action.payload;
+    },
+    reduxSetRemoteStreams: (state, action) => {
+      state.remoteStreams = action.payload;
+    },
+    reduxSetAudioOnly: (state, action) => {
+      state.audioOnly = true;
+    },
+    reduxUnSetAudioOnly: (state, action) => {
+      state.audioOnly = false;
+    },
     reduxSetScreenShareStream: (state, action) => {},
   },
 });
@@ -59,6 +68,7 @@ export const {
   reduxSetScreenShareStream,
   reduxLeaveTheRoom,
   reduxCloseTheRoom,
+  reduxUnSetAudioOnly,
 } = makeVideoSlice.actions;
 
 export default makeVideoSlice.reducer;

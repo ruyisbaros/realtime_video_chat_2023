@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeCapitalize } from "../../utils/capitalize";
 import { joinActiveRoom } from "../../SocketIOConnection";
 import { reduxOpenRoom } from "../../redux/videoSlice";
+import { getLocalStreamPreview } from "./WebRTCHandler";
 
 const ActiveRoomBtn = ({ room }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeRooms } = useSelector((store) => store.videos);
+  const { activeRooms, audioOnly } = useSelector((store) => store.videos);
   const [isUserInRoom, setIsUserInRoom] = useState(false);
 
   useEffect(() => {
@@ -22,7 +23,10 @@ const ActiveRoomBtn = ({ room }) => {
 
   const handleJoinActiveRoom = () => {
     if (!isUserInRoom && room.participants.length < 3) {
-      joinActiveRoom(loggedUser.id, room.roomId);
+      const successCallBackFunc = () => {
+        joinActiveRoom(loggedUser.id, room.roomId);
+      };
+      getLocalStreamPreview(audioOnly, successCallBackFunc);
     }
   };
 

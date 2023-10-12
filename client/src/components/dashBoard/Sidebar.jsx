@@ -6,17 +6,22 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
 import ActiveRoomBtn from "../videos/ActiveRoomBtn";
+import { getLocalStreamPreview } from "../videos/WebRTCHandler";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeRooms } = useSelector((store) => store.videos);
+  const { activeRooms, audioOnly } = useSelector((store) => store.videos);
   const { myFriends } = useSelector((store) => store.friends);
   const [rooms, setRooms] = useState([]);
 
   const createNewRoom = async () => {
-    openCreateNewRoom(loggedUser);
-    emitActiveRooms(); //This id will be set
+    const successCallBackFunc = () => {
+      openCreateNewRoom(loggedUser);
+      emitActiveRooms();
+    };
+
+    getLocalStreamPreview(audioOnly, successCallBackFunc);
   };
 
   useEffect(() => {

@@ -27,7 +27,19 @@ exports.socketServer = (socket, io) => {
         lastSeen: date,
       });
     }
-    socket.broadcast.emit("user got offline", user?.id);
+    io.emit("user got offline", user?.id);
+    //Check for active rooms
+    activeRooms.forEach((rooms) => {
+      const userInRoom = rooms.participants.some(
+        (prt) => prt.socketId === socket.id
+      );
+      if (userInRoom) {
+        rooms.participants = rooms.participants.filter(
+          (prt) => prt.socketId !== socket.id
+        );
+      }
+    });
+    io.emit("leave from room", activeRooms);
   });
   socket.on("logout", async (id) => {
     const user = users.find((u) => u.id === id);
@@ -40,7 +52,7 @@ exports.socketServer = (socket, io) => {
         lastSeen: date,
       });
     }
-    socket.broadcast.emit("user got offline", user?.id);
+    io.emit("user got offline", user?.id);
   });
 
   //Users invitations actions listen

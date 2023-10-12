@@ -11,6 +11,7 @@ import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
 import { inviteFriend } from "../SocketIOConnection";
 import Room from "../components/videos/Room";
+import { reduxSetLocalStream } from "../redux/videoSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -83,6 +84,7 @@ const Dashboard = () => {
       toast.error(error.response.data.message);
     }
   };
+
   return (
     <>
       <div

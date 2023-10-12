@@ -29,7 +29,7 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
       dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
     } else {
       leaveFromRoom(loggedUser.id, roomDetails.roomId);
-      console.log("triggered");
+      //console.log("triggered");
       dispatch(
         reduxLeaveTheRoom({ idR: roomDetails.roomId, idU: loggedUser.id })
       );
