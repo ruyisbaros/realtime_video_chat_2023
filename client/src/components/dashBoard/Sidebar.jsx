@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { emitActiveRooms, openCreateNewRoom } from "../../SocketIOConnection";
 import ActiveRoomBtn from "../videos/ActiveRoomBtn";
 import { getLocalStreamPreview } from "../videos/WebRTCHandler";
-import Peer from "simple-peer";
 
 const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const Sidebar = ({ setOpenAddFriendBox, setMessagesStatus }) => {
       setRooms([]);
     }
   }, [activeRooms, myFriends]);
-  console.log(rooms);
+  //console.log(rooms);
   return (
     <div className="sidebar-main">
       <div className="sidebar-left">

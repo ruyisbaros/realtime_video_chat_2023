@@ -11,7 +11,6 @@ import { reduxFetchMyFriends } from "../redux/FriendsSlice";
 import { reduxFetchMyInvitations } from "../redux/invitationsSlice";
 import { inviteFriend } from "../SocketIOConnection";
 import Room from "../components/videos/Room";
-import { reduxSetLocalStream } from "../redux/videoSlice";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -20,7 +19,8 @@ const Dashboard = () => {
   const [status, setStatus] = useState(false);
   const [messagesStatus, setMessagesStatus] = useState(false);
   const { loggedUser } = useSelector((store) => store.currentUser);
-  const { activeRooms } = useSelector((store) => store.videos);
+  const { socket } = useSelector((store) => store.sockets);
+  const { activeRooms, localStream } = useSelector((store) => store.videos);
   const [isInRoom, setIsInRoom] = useState(false);
 
   useEffect(() => {

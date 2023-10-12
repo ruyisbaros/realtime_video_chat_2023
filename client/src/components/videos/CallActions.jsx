@@ -29,11 +29,20 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
 
   const handleLeaveRoom = () => {
     if (roomDetails.roomCreator.userId === loggedUser.id) {
-      if (
-        window.confirm(
-          "You are the creator of room. This will be reason of all participants lose connection. Do you want to continue?"
-        )
-      ) {
+      if (roomDetails.participants.length > 1) {
+        if (
+          window.confirm(
+            "You are the creator of room. This will be reason of all participants lose connection. Do you want to continue?"
+          )
+        ) {
+          closeTheRoom(roomDetails.roomId);
+          dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
+          if (localStream !== null) {
+            localStream.getTracks().forEach((track) => track.stop());
+            dispatch(reduxSetLocalStream(null));
+          }
+        }
+      } else {
         closeTheRoom(roomDetails.roomId);
         dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
         if (localStream !== null) {

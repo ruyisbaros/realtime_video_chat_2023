@@ -148,8 +148,8 @@ exports.socketServer = (socket, io) => {
           rm.participants.push({ userId, socketId: socket.id });
         }
       });
+      io.emit("updated rooms", activeRooms);
     }
-    io.emit("updated rooms", activeRooms);
   });
 
   socket.on("leave from room", ({ userId, roomId }) => {
@@ -184,5 +184,14 @@ exports.socketServer = (socket, io) => {
           socket.to(`${prt.socketId}`).emit("conn-prepare", user?.socketId);
         }
       });
+  });
+
+  socket.on("conn-init", (socketId) => {
+    socket.to(`${socketId}`).emit("conn-init", socket.id);
+  });
+  socket.on("conn-signal", (data) => {
+    socket
+      .to(`${data.remoteUserSocket}`)
+      .emit("conn-signal", { signal: data.signal, socketId: socket.id });
   });
 };

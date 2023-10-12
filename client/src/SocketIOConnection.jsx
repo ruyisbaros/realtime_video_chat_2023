@@ -16,6 +16,11 @@ import { createSocket } from "./redux/socketSlicer";
 import { reduxAddMyInvitations } from "./redux/invitationsSlice";
 import { reduxAddMyFriends } from "./redux/FriendsSlice";
 import { reduxRoomDetails, reduxSetActiveRooms } from "./redux/videoSlice";
+import {
+  handleSignallingData,
+  prepareNewPeerConnection,
+} from "./components/videos/WebRTCHandler";
+
 let socket;
 
 export const connectWithSocketServer = () => {
@@ -27,6 +32,7 @@ export const connectToSocketServer = () => {
   socket.on("connect", () => {
     console.log("Connected to socket io server");
     store.dispatch(createSocket(socket));
+    //console.log(store.getState());
   });
   socket.on("setup socketId", (id) => {
     console.log("remote socket id ", id);
@@ -92,10 +98,19 @@ export const connectToSocketServer = () => {
     window.localStorage.setItem("activeRoomsDiscord", JSON.stringify(rooms));
     store.dispatch(reduxSetActiveRooms(rooms));
   });
-
-  //Video signals listen
   socket.on("conn-prepare", (remoteUserSocket) => {
     console.log(remoteUserSocket);
+    prepareNewPeerConnection(remoteUserSocket, false); //Is initiator?he/she will join
+    socket.emit("conn-init", remoteUserSocket);
+  });
+  socket.on("conn-init", (socketId) => {
+    console.log(socketId);
+    prepareNewPeerConnection(socketId, true); //Is initiator?
+  });
+
+  socket.on("conn-signal", ({ signal, socketId }) => {
+    //console.log(socketId);
+    handleSignallingData({ signal, socketId });
   });
 };
 
