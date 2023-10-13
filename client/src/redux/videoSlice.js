@@ -47,7 +47,7 @@ const makeVideoSlice = createSlice({
       state.localStream = action.payload;
     },
     reduxSetRemoteStreams: (state, action) => {
-      state.remoteStreams = action.payload;
+      state.remoteStreams.push(action.payload);
     },
     reduxSetAudioOnly: (state, action) => {
       state.audioOnly = true;

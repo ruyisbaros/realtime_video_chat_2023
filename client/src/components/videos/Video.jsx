@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from "react";
 
-const Video = ({ localStream, isLocalStream }) => {
+const Video = ({ stream, isLocalStream }) => {
   const videoRef = useRef();
 
   useEffect(() => {
     const video = videoRef.current;
-    video.srcObject = localStream;
+    video.srcObject = stream;
 
     video.onloadedmetadata = () => {
       video.play();
     };
-  }, [localStream]);
+  }, [stream]);
 
   return (
     <div className="video-main">

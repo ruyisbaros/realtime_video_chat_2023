@@ -1,7 +1,10 @@
 import { toast } from "react-toastify";
 import { store } from "../../redux/store";
 import Peer from "simple-peer";
-import { reduxSetLocalStream } from "../../redux/videoSlice";
+import {
+  reduxSetLocalStream,
+  reduxSetRemoteStreams,
+} from "../../redux/videoSlice";
 const audioOnlyConstraints = {
   audio: true,
   video: false,
@@ -70,6 +73,9 @@ export const prepareNewPeerConnection = (remoteUserSocket, isInitiator) => {
 
   peers[remoteUserSocket].on("stream", (remoteStream) => {
     console.log("remote stream from another user");
+    //console.log(remoteStream);
+    //remoteStream.connectedUserSocketId = remoteUserSocket;
+    store.dispatch(reduxSetRemoteStreams({ remoteUserSocket, remoteStream }));
   });
 };
 
