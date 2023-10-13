@@ -11,13 +11,18 @@ import {
   AiOutlineClose,
 } from "react-icons/ai";
 import { BsCameraVideo, BsCameraVideoOff } from "react-icons/bs";
-import { closeTheRoom, leaveFromRoom } from "../../SocketIOConnection";
+import {
+  closeTheRoom,
+  leaveFromRoom,
+  participantLeftInfo,
+} from "../../SocketIOConnection";
 import { useDispatch, useSelector } from "react-redux";
 import {
   reduxLeaveTheRoom,
   reduxCloseTheRoom,
   reduxSetLocalStream,
 } from "../../redux/videoSlice";
+import { closeAllConnections } from "./WebRTCHandler";
 
 const CallActions = ({ setIsFullScreen, isFullScreen }) => {
   const dispatch = useDispatch();
@@ -29,27 +34,14 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
 
   const handleLeaveRoom = () => {
     if (roomDetails.roomCreator.userId === loggedUser.id) {
-      if (roomDetails.participants.length > 1) {
-        if (
-          window.confirm(
-            "You are the creator of room. This will be reason of all participants lose connection. Do you want to continue?"
-          )
-        ) {
-          closeTheRoom(roomDetails.roomId);
-          dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
-          if (localStream !== null) {
-            localStream.getTracks().forEach((track) => track.stop());
-            dispatch(reduxSetLocalStream(null));
-          }
-        }
-      } else {
-        closeTheRoom(roomDetails.roomId);
-        dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
-        if (localStream !== null) {
-          localStream.getTracks().forEach((track) => track.stop());
-          dispatch(reduxSetLocalStream(null));
-        }
+      closeTheRoom(roomDetails.roomId);
+      dispatch(reduxCloseTheRoom({ idR: roomDetails.roomId }));
+      if (localStream !== null) {
+        localStream.getTracks().forEach((track) => track.stop());
+        dispatch(reduxSetLocalStream(null));
       }
+      closeAllConnections();
+      participantLeftInfo(loggedUser.id, roomDetails.roomId);
     } else {
       leaveFromRoom(loggedUser.id, roomDetails.roomId);
       //console.log("triggered");
@@ -60,6 +52,8 @@ const CallActions = ({ setIsFullScreen, isFullScreen }) => {
         localStream.getTracks().forEach((track) => track.stop());
         dispatch(reduxSetLocalStream(null));
       }
+      closeAllConnections();
+      participantLeftInfo(loggedUser.id, roomDetails.roomId);
     }
   };
   return (

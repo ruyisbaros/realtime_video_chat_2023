@@ -72,15 +72,39 @@ export const prepareNewPeerConnection = (remoteUserSocket, isInitiator) => {
   });
 
   peers[remoteUserSocket].on("stream", (remoteStream) => {
-    console.log("remote stream from another user");
+    //console.log("remote stream from another user");
     //console.log(remoteStream);
     //remoteStream.connectedUserSocketId = remoteUserSocket;
     store.dispatch(reduxSetRemoteStreams({ remoteUserSocket, remoteStream }));
   });
+  console.log(Object.entries(peers));
 };
 
 export const handleSignallingData = ({ signal, socketId }) => {
   if (peers[socketId]) {
     peers[socketId].signal(signal);
   }
+};
+
+export const closeAllConnections = () => {
+  Object.entries(peers).forEach((mappedObject) => {
+    const remoteUserSocket = mappedObject[0];
+    if (peers[remoteUserSocket]) {
+      peers[remoteUserSocket].destroy();
+      delete peers[remoteUserSocket];
+    }
+  });
+};
+
+export const handleParticipantLeftRoom = (leftUserSocketId) => {
+  if (peers[leftUserSocketId]) {
+    peers[leftUserSocketId].destroy();
+    delete peers[leftUserSocketId];
+  }
+
+  let remoteStreams = store.getState().videos.remoteStreams;
+  const newRemoteStreams = remoteStreams.filter(
+    (str) => str.remoteUserSocket !== leftUserSocketId
+  );
+  store.dispatch(reduxSetRemoteStreams(newRemoteStreams));
 };

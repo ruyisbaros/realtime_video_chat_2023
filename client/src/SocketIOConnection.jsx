@@ -17,6 +17,7 @@ import { reduxAddMyInvitations } from "./redux/invitationsSlice";
 import { reduxAddMyFriends } from "./redux/FriendsSlice";
 import { reduxRoomDetails, reduxSetActiveRooms } from "./redux/videoSlice";
 import {
+  handleParticipantLeftRoom,
   handleSignallingData,
   prepareNewPeerConnection,
 } from "./components/videos/WebRTCHandler";
@@ -99,18 +100,22 @@ export const connectToSocketServer = () => {
     store.dispatch(reduxSetActiveRooms(rooms));
   });
   socket.on("conn-prepare", (remoteUserSocket) => {
-    console.log(remoteUserSocket);
+    //console.log(remoteUserSocket);
     prepareNewPeerConnection(remoteUserSocket, false); //Is initiator?he/she will join
     socket.emit("conn-init", remoteUserSocket);
   });
   socket.on("conn-init", (socketId) => {
-    console.log(socketId);
+    //console.log(socketId);
     prepareNewPeerConnection(socketId, true); //Is initiator?
   });
 
   socket.on("conn-signal", ({ signal, socketId }) => {
     //console.log(socketId);
     handleSignallingData({ signal, socketId });
+  });
+  socket.on("participant left", (socketId) => {
+    console.log("User left room");
+    handleParticipantLeftRoom(socketId);
   });
 };
 
@@ -164,4 +169,8 @@ export const closeTheRoom = (roomId) => {
 
 export const prepConnAfterJoin = (userId, roomId) => {
   socket.emit("conn-prepare", { userId, roomId });
+};
+
+export const participantLeftInfo = (userId, roomId) => {
+  socket.emit("participant left", { userId, roomId });
 };

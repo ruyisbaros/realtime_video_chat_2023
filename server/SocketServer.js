@@ -168,6 +168,16 @@ exports.socketServer = (socket, io) => {
     io.emit("leave from room", activeRooms);
   });
 
+  socket.on("participant left", ({ userId, roomId }) => {
+    const user = users.find((u) => String(u.id) === String(userId));
+    let room = activeRooms.find((rm) => rm.roomId === roomId);
+    if (room) {
+      room.participants.forEach((prt) => {
+        socket.to(`${prt.socketId}`).emit("participant left", socket.id);
+      });
+    }
+  });
+
   socket.on("close the room", (roomId) => {
     activeRooms = activeRooms.filter((rm) => rm.roomId !== roomId);
     io.emit("close the room", activeRooms);
